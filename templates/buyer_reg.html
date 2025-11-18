@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - ArtCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Furni CSS -->
+    <link href="{% static 'furni-1.0.0/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'furni-1.0.0/css/style.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Start Navigation -->
+<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/index/">ArtHome<span>.</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsFurni">
+            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/product_list/">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navigation -->
+
+<!-- Registration Form Section -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h3 class="mb-4 text-center">Create Account</h3>
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'buyer_reg_post' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="fname" class="form-label">First Name</label>
+                            <input type="text" class="form-control" name="fname" id="fname" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lname" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" name="lname" id="lname" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">Mobile</label>
+                            <input type="tel" class="form-control" name="mobile" id="mobile" required>
+                        </div>
+                        <!-- Optional profile image -->
+                        <!--
+                        <div class="mb-3">
+                            <label for="p_image" class="form-label">Profile Image</label>
+                            <input type="file" class="form-control" name="p_image" id="p_image" accept="image/*">
+                        </div>
+                        -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" id="password" required>
+                        </div>
+                        {% if error %}
+                            <div class="alert alert-danger mt-3">{{ error }}</div>
+                        {% endif %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                    <p class="text-center mt-3">
+                        Already have an account?
+                        <a href="{% url 'login' %}">Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Registration Form Section -->
+
+<!-- Footer -->
+<footer class="footer-section mt-5">
+    <div class="container text-center">
+        <p class="text-muted">&copy; <script>document.write(new Date().getFullYear());</script> ArtCart. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static 'furni-1.0.0/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'furni-1.0.0/js/custom.js' %}"></script>
+
+</body>
+</html>

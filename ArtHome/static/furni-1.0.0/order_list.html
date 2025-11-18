@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Dashboard - Artcart</title>
+		<link href="{% static 'furni-1.0.0/css/bootstrap.min.css' %}" rel="stylesheet">    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .sidebar {
+            height: 100vh;
+            background: #212529;
+            color: white;
+            position: fixed;
+            width: 250px;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            border-radius: 5px;
+            margin: 4px 0;
+        }
+        .sidebar a:hover {
+            background: #343a40;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 15px;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4 class="text-center mb-4">Artcart Seller</h4>
+    <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+    <a href="{% url 'seller_add_product' %}">➕ Add Product</a>
+    <a href="{% url 'seller_product_view' %}">🖼 My Products</a>
+    <a href="{% url 'orders' %}">📦 Orders</a>
+    <a href="{% url 'seller_profile_page' %}">👤 Profile</a>
+    <a href="{% url 'login' %}">🚪 Logout</a>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+    <h2 class="mb-4">Welcome, Seller!</h2>
+
+    <!-- Stats Row -->
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card stat-card bg-primary text-white">
+                <h4>{{ total_products }}</h4>
+                <p>Products</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-success text-white">
+                <h4>{{ total_orders }}</h4>
+                <p>Total Orders</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-warning text-dark">
+                <h4>{{ total_stock }}</h4>
+                <p>Total Stock</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-info text-white">
+                <h4>INR {{ total_revenue }}</h4>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="card mt-4">
+        <div class="card-header bg-dark text-white">Your Products</div>
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Manage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for p in products %}
+                    <tr>
+                        <td><img src="{{ p.image.url }}" width="60" height="60" class="rounded"></td>
+                        <td>{{ p.title }}</td>
+                        <td>{{ p.category }}</td>
+                        <td>{{ p.stock }}</td>
+                        <td>INR {{ p.price }}</td>
+                        <td>
+                            <a href="{% url 'edit_product' p.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'delete_product' p.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6" class="text-center">No products added yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Orders List -->
+    <div class="card mt-4">
+        <div class="card-header bg-dark text-white">Recent Orders</div>
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Buyer</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for o in orders %}
+                    <tr>
+                        <td>{{ o.order.id }}</td>
+                        <td>{{ o.product.title }}</td>
+                        <td>{{ o.order.fname }} {{ o.order.lname }}</td>
+                        <td>{{ o.quantity }}</td>
+                        <td>INR {{ o.product.price }}</td>
+                        <td>{{ o.order.created_at|date:"d M Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6" class="text-center">No orders yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'furni-1.0.0/js/bootstrap.bundle.min.js' %}"></script></body>
+</html>

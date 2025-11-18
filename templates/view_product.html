@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products list</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Sl no</th>
+            <th>Prouct name</th>
+            <th>Category</th>
+            <th>Sub Category</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Manufacturing date</th>
+            <th>Quantity</th>
+            <th>Dimensions</th>
+            <th>Price</th>
+        </tr>
+        {% for i in product %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.title}}</td>
+            <td>{{i.category}}</td>
+            <td>{{i.sub_category}}</td>
+            <td>{{i.description}}</td>
+            <td><img src="{{i.images.url}}" width="100" height="100"></td>
+            <td>{{i.m_date}}</td>
+            <td>{{i.qty}}</td>
+            <td>{{i.dimensions}}</td>
+            <td>{{i.price}}</td>
+            <td><a href="/product_data_edit/{{i.id}}/">Edit</a></td>
+            <td><a href="/product_delete/{{i.id}}/">Delete</a></td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/seller_product_view/">Back</a>
+    
+</body>
+</html>

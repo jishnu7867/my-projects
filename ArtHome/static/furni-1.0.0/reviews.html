@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtCart - Reviews</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* Reuse the same styles from dashboard.html */
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+        }
+        .text-muted {
+            --bs-text-opacity: 1;
+            color: rgb(249 252 255 / 75%) !important;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .user-info p {
+            font-size: 12px;
+            color: #6C757D;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1000;
+                width: 250px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .offcanvas-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+        .review-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .customer-img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .star-rating {
+            color: #FFD700;
+            font-size: 18px;
+        }
+        .review-date {
+            font-size: 12px;
+            color: #6C757D;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+        <div class="container-fluid">
+            <span class="navbar-brand">ArtCart</span>
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0" id="sidebar">
+                <div class="d-flex flex-column h-100">
+                    <div class="p-3">
+                        <h3 class="d-none d-md-block">ArtCart</h3>
+                        <p class="text-muted d-none d-md-block">Seller Dashboard</p>
+                    </div>
+                    <nav class="nav flex-column flex-grow-1">
+                        <a href="/dashboard/">Overview</a>
+                        <a href="/products/">Products</a>
+                        <a href="/order_list/">Orders</a>
+                        <a href="/customers/">Customers</a>
+                        <a href="/reviews/" class="active">Reviews</a>
+                        <!-- <a href="/earnings/">Earnings</a> -->
+                        <a href="/settings/">Settings</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto main-content px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2>Product Reviews</h2>
+                    <div class="user-profile">
+                        <img src="https://via.placeholder.com/40" alt="User">
+                        <div class="user-info">
+                            <h4>Jane Doe</h4>
+                            <p>Art Seller</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Filters -->
+                <div class="content-section mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="reviewRating" class="form-label">Rating</label>
+                            <select id="reviewRating" class="form-select">
+                                <option value="">All Ratings</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Star</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="reviewProduct" class="form-label">Product</label>
+                            <select id="reviewProduct" class="form-select">
+                                <option value="">All Products</option>
+                                <option value="1">Abstract Landscape</option>
+                                <option value="2">Portrait Series</option>
+                                <option value="3">Modern Sculpture</option>
+                                <option value="4">Digital Art</option>
+                                <option value="5">Watercolor Set</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="reviewSearch" class="form-label">Search</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="reviewSearch" placeholder="Customer name, review text...">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100">Filter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews List -->
+                <div class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>Customer Reviews</h4>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">Average Rating:</span>
+                            <div class="star-rating">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                                <span class="ms-2">4.6/5 (128 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Item -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/40?text=SJ" class="customer-img me-3" alt="Customer">
+                                    <div>
+                                        <h6 class="mb-0">Sarah Johnson</h6>
+                                        <div class="star-rating">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">May 18, 2023</span>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://via.placeholder.com/60?text=Abstract+Art" class="review-img me-3" alt="Product">
+                                <div>
+                                    <h6>Abstract Landscape</h6>
+                                    <p class="mb-2">Absolutely stunning piece! The colors are even more vibrant in person. It's the centerpiece of my living room now. The packaging was also very secure and arrived ahead of schedule.</p>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-check-lg"></i> Approve</button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Item -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/40?text=MC" class="customer-img me-3" alt="Customer">
+                                    <div>
+                                        <h6 class="mb-0">Michael Chen</h6>
+                                        <div class="star-rating">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">May 17, 2023</span>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://via.placeholder.com/60?text=Portrait" class="review-img me-3" alt="Product">
+                                <div>
+                                    <h6>Portrait Series</h6>
+                                    <p class="mb-2">Beautiful artwork, but the frame arrived with a small scratch. The artist was very responsive and offered a partial refund to compensate. Would still recommend!</p>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-check-lg"></i> Approve</button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Item -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/40?text=ER" class="customer-img me-3" alt="Customer">
+                                    <div>
+                                        <h6 class="mb-0">Emily Rodriguez</h6>
+                                        <div class="star-rating">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">May 16, 2023</span>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://via.placeholder.com/60?text=Sculpture" class="review-img me-3" alt="Product">
+                                <div>
+                                    <h6>Modern Sculpture</h6>
+                                    <p class="mb-2">This sculpture is even more impressive in person. The craftsmanship is excellent and it looks perfect on my bookshelf. Shipping took a bit longer than expected, but worth the wait.</p>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-check-lg"></i> Approve</button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Item -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/40?text=DB" class="customer-img me-3" alt="Customer">
+                                    <div>
+                                        <h6 class="mb-0">David Brown</h6>
+                                        <div class="star-rating">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                            <i class="bi bi-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">May 15, 2023</span>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://via.placeholder.com/60?text=Digital+Art" class="review-img me-3" alt="Product">
+                                <div>
+                                    <h6>Digital Art</h6>
+                                    <p class="mb-2">The print quality is good, but the colors are slightly different from what I saw on my screen. Maybe my monitor needs calibration. Still a nice piece though.</p>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-check-lg"></i> Approve</button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Item -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://via.placeholder.com/40?text=LW" class="customer-img me-3" alt="Customer">
+                                    <div>
+                                        <h6 class="mb-0">Lisa Wilson</h6>
+                                        <div class="star-rating">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">May 14, 2023</span>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://via.placeholder.com/60?text=Watercolor" class="review-img me-3" alt="Product">
+                                <div>
+                                    <h6>Watercolor Set</h6>
+                                    <p class="mb-2">Absolutely love this watercolor! The texture is perfect and it arrived beautifully packaged. The artist even included a small thank you note which was a nice touch. Will definitely purchase again!</p>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm btn-outline-success me-2"><i class="bi bi-check-lg"></i> Approve</button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Review Stats -->
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Reviews</h5>
+                                <h2 class="card-text">128</h2>
+                                <p class="card-text"><small>+15 this month</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">5-Star Reviews</h5>
+                                <h2 class="card-text">84</h2>
+                                <p class="card-text"><small>66% of total</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-dark h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Avg. Response Time</h5>
+                                <h2 class="card-text">6h</h2>
+                                <p class="card-text"><small>To customer inquiries</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Response Rate</h5>
+                                <h2 class="card-text">98%</h2>
+                                <p class="card-text"><small>Of reviews responded to</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            let backdrop = null;
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                
+                if (sidebar.classList.contains('show')) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'offcanvas-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                    
+                    backdrop.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        this.remove();
+                    });
+                } else if (backdrop) {
+                    backdrop.remove();
+                }
+            });
+
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('show');
+                    if (backdrop) {
+                        backdrop.remove();
+                        backdrop = null;
+                    }
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+        });
+    </script>
+</body>
+</html>

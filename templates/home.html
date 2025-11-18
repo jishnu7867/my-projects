@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to ArtCart</title>
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <nav>
+        <div class="logo">ArtCart</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'login_category' %}">Register</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to ArtCart</h1>
+            <p>Your marketplace for unique and creative artwork.</p>
+            <div class="buttons">
+                <a href="{% url 'login' %}" class="btn">Login</a>
+                <a href="{% url 'login_category' %}" class="btn">Register</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+

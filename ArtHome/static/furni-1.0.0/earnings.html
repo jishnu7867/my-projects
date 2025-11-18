@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtCart - Earnings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <style>
+        /* Reuse the same styles from dashboard.html */
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .user-info p {
+            font-size: 12px;
+            color: #6C757D;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1000;
+                width: 250px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .offcanvas-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        .earning-card {
+            border-left: 4px solid;
+            border-radius: 8px;
+        }
+        .earning-card.primary {
+            border-left-color: #0d6efd;
+        }
+        .earning-card.success {
+            border-left-color: #198754;
+        }
+        .earning-card.warning {
+            border-left-color: #ffc107;
+        }
+        .earning-card.info {
+            border-left-color: #0dcaf0;
+        }
+        .transaction-item {
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .transaction-item:hover {
+            background-color: #f8f9fa;
+            border-left-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+        <div class="container-fluid">
+            <span class="navbar-brand">ArtCart</span>
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0" id="sidebar">
+                <div class="d-flex flex-column h-100">
+                    <div class="p-3">
+                        <h3 class="d-none d-md-block">ArtCart</h3>
+                        <p class="text-muted d-none d-md-block">Seller Dashboard</p>
+                    </div>
+                    <nav class="nav flex-column flex-grow-1">
+                        <a href="/dashboard/">Overview</a>
+                        <a href="/products/">Products</a>
+                        <a href="/order_list/">Orders</a>
+                        <a href="/customers/">Customers</a>
+                        <a href="/reviews/">Reviews</a>
+                        <a href="/earnings/" class="active">Earnings</a>
+                        <a href="/settings/">Settings</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto main-content px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2>Earnings & Payouts</h2>
+                    <div class="user-profile">
+                        <img src="https://via.placeholder.com/40" alt="User">
+                        <div class="user-info">
+                            <h4>Jane Doe</h4>
+                            <p>Art Seller</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Overview -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 earning-card primary">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Earnings</h5>
+                                <h2 class="card-text">$8,450</h2>
+                                <p class="card-text"><small>All time</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 earning-card success">
+                            <div class="card-body">
+                                <h5 class="card-title">Available Balance</h5>
+                                <h2 class="card-text">$1,250</h2>
+                                <p class="card-text"><small>Ready for payout</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 earning-card warning">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Clearance</h5>
+                                <h2 class="card-text">$650</h2>
+                                <p class="card-text"><small>In processing</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 earning-card info">
+                            <div class="card-body">
+                                <h5 class="card-title">Next Payout</h5>
+                                <h2 class="card-text">May 31</h2>
+                                <p class="card-text"><small>Estimated: $1,250</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Chart -->
+                <div class="content-section mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Earnings Overview</h4>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-secondary active">Monthly</button>
+                            <button class="btn btn-sm btn-outline-secondary">Quarterly</button>
+                            <button class="btn btn-sm btn-outline-secondary">Yearly</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="earningsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Recent Transactions -->
+                    <div class="col-md-6 mb-4">
+                        <div class="content-section h-100">
+                            <h4 class="mb-3">Recent Transactions</h4>
+                            <div class="list-group">
+                                <div class="list-group-item list-group-item-action transaction-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Order #AC-1250</h6>
+                                        <small class="text-success">+$245</small>
+                                    </div>
+                                    <p class="mb-1">Abstract Landscape</p>
+                                    <small class="text-muted">May 18, 2023 · Sarah Johnson</small>
+                                </div>
+                                <div class="list-group-item list-group-item-action transaction-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Order #AC-1249</h6>
+                                        <small class="text-success">+$220</small>
+                                    </div>
+                                    <p class="mb-1">Portrait Series</p>
+                                    <small class="text-muted">May 17, 2023 · Michael Chen</small>
+                                </div>
+                                <div class="list-group-item list-group-item-action transaction-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Order #AC-1248</h6>
+                                        <small class="text-success">+$350</small>
+                                    </div>
+                                    <p class="mb-1">Modern Sculpture</p>
+                                    <small class="text-muted">May 16, 2023 · Emily Rodriguez</small>
+                                </div>
+                                <div class="list-group-item list-group-item-action transaction-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Payout</h6>
+                                        <small class="text-danger">-$1,120</small>
+                                    </div>
+                                    <p class="mb-1">Bank Transfer</p>
+                                    <small class="text-muted">May 15, 2023 · Completed</small>
+                                </div>
+                                <div class="list-group-item list-group-item-action transaction-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Order #AC-1247</h6>
+                                        <small class="text-success">+$180</small>
+                                    </div>
+                                    <p class="mb-1">Digital Art</p>
+                                    <small class="text-muted">May 15, 2023 · David Brown</small>
+                                </div>
+                            </div>
+                            <div class="text-end mt-3">
+                                <a href="#" class="btn btn-sm btn-outline-primary">View All Transactions</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Selling Products -->
+                    <div class="col-md-6 mb-4">
+                        <div class="content-section h-100">
+                            <h4 class="mb-3">Top Selling Products</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Sales</th>
+                                            <th>Earnings</th>
+                                            <th>% of Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Digital Art</td>
+                                            <td>42</td>
+                                            <td>$3,360</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Abstract Landscape</td>
+                                            <td>28</td>
+                                            <td>$4,200</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Portrait Series</td>
+                                            <td>15</td>
+                                            <td>$3,300</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 39%" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Watercolor Set</td>
+                                            <td>18</td>
+                                            <td>$2,160</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 26%" aria-valuenow="26" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Modern Sculpture</td>
+                                            <td>5</td>
+                                            <td>$1,750</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 21%" aria-valuenow="21" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-end mt-3">
+                                <a href="#" class="btn btn-sm btn-outline-primary">View Full Report</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payout Settings -->
+                <div class="content-section">
+                    <h4 class="mb-3">Payout Settings</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Payment Method</h5>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-bank fs-3 me-3"></i>
+                                        <div>
+                                            <h6 class="mb-0">Bank Transfer</h6>
+                                            <small class="text-muted">Account ending in 7890</small>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-primary">Change Method</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Payout Schedule</h5>
+                                    <p class="card-text">Currently set to <strong>Monthly</strong> payouts on the <strong>last day</strong> of each month.</p>
+                                    <button class="btn btn-outline-primary">Change Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button class="btn btn-primary">Request Payout</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            let backdrop = null;
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                
+                if (sidebar.classList.contains('show')) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'offcanvas-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                    
+                    backdrop.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        this.remove();
+                    });
+                } else if (backdrop) {
+                    backdrop.remove();
+                }
+            });
+
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('show');
+                    if (backdrop) {
+                        backdrop.remove();
+                        backdrop = null;
+                    }
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+
+            // Earnings Chart
+            const ctx = document.getElementById('earningsChart').getContext('2d');
+            const earningsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Earnings ($)',
+                        data: [650, 590, 800, 810, 1250, 1050, 980, 1100, 950, 1200, 1150, 1300],
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderColor: 'rgba(13, 110, 253, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

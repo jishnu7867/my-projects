@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtCart - Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* Reuse the same styles from dashboard.html */
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+        }
+        .text-muted {
+            --bs-text-opacity: 1;
+            color: rgba(12, 12, 11, 0.75) !important;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .user-info p {
+            font-size: 12px;
+            color: #6C757D;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1000;
+                width: 250px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .offcanvas-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+        .product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .status-badge {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+        <div class="container-fluid">
+            <span class="navbar-brand">ArtCart</span>
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0" id="sidebar">
+                <div class="d-flex flex-column h-100">
+                    <div class="p-3">
+                        <h3 class="d-none d-md-block">ArtCart</h3>
+                        <p class="text-muted d-none d-md-block">Seller Dashboard</p>
+                    </div>
+                    <nav class="nav flex-column flex-grow-1">
+                        <a href="/dashboard/">Overview</a>
+                        <a href="/products/" class="active">Products</a>
+                        <a href="/order_list/">Orders</a>
+                        <a href="/customers/">Customers</a>
+                        <a href="/reviews/">Reviews</a>
+                        <!-- <a href="/earnings/">Earnings</a> -->
+                        <a href="/settings/">Settings</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto main-content px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2>Manage Products</h2>
+                   <div class="user-profile">
+                        {% for seller in seller %}
+                        <img src="{{ seller.profile_picture.url }}" alt="User">
+                        <div class="user-info">
+                            <h4>{{ seller.owner}}</h4>
+                            <p>Art Seller</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Products Actions -->
+                 
+                <div class="content-section mb-4">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <form action="/search_products/" method="post">
+                            {% csrf_token %}
+                        <div class="input-group" style="max-width: 500px;">
+                            <input type="text" class="form-control" id="search" name="search" placeholder="Search products...">
+
+                            <!-- <select name="form-select" id="sort_by" name="sort_by">
+                                <option value="">Sort By</option>
+                                <option value="price_asc">Price: Low to High</option>
+                                <option value="price_desc">Price: High to Low</option>
+                            </select> -->
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                        </form>
+
+                        <div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                                <i class="bi bi-plus-lg"></i> Add Product
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+
+                <!-- Products Table -->
+                <div class="content-section">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Sales</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in products %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{p.images.url}}" class="product-img me-3" alt="Product">
+                                            <div>
+                                                <h6 class="mb-0">{{p.title}}</h6>
+                                                <small class="text-muted">ID: ART-{{p.id}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{p.category}}</td>
+                                    <td>INR {{p.price}}</td>
+                                    <td>{{p.qty}}</td>
+                                    <td><span class="badge bg-success status-badge">Active</span></td>
+                                    <td>{{p.order_product.count}}</td>
+                                    <td>
+                                        <a href="/product_edit/{{p.id}}/" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+                                        <a href="/product_delete/{{p.id}}/" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                                        
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if products.has_previous %} 
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in products.paginator.page_range %}
+                                {% if products.number == num %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{num}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if products.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ products.next_page_number }} " tabindex="-1">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        
+                    </nav>
+                    <a href="/products/"  class="btn btn-secondary">Cancel</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/seller_add_product_post/" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="title" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="title" name="title" required >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Select category</option>
+                                    <option value="painting">Painting</option>
+                                    <option value="drawing">Drawing</option>
+                                    <option value="sculpture">Sculpture</option>
+                                    <option value="digital">Digital Art</option>
+                                    <option value="photography">Photography</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sub_category">Sub Category</label>
+                                <select class="form-select" name="sub_category" id="sub_category" ></select>
+
+                            </div>
+                        </div>
+                            <div class="col-md-6">
+                                <label for="dimensions" class="form-label">Dimension</label>
+                                <input type="text" class="form-control" id="dimensions" name="dimensions" min="0" required>
+                            </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="price" class="form-label">Price ($)</label>
+                                <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="qty" class="form-label">Stock Quantity</label>
+                                <input type="number" class="form-control" id="qty" name="qty" min="0" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Upload Images</label>
+                            <input class="form-control" type="file" id="images" name="images" multiple accept="image/*">
+                            <div class="form-text">Upload high-quality images of your artwork (max 5 images)</div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="productStatus" checked>
+                            <label class="form-check-label" for="productStatus">
+                                Active (List this product for sale)
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        const subCategoryMap = {
+            painting: ["Landscape", "Portrait", "Abstract", "Still Life"],
+            sculpture: ["Figurative", "Abstract"],
+            drawing: ["Pencil", "Charcoal", "Ink"],
+            digital_art: ["Digital Illustration", "3D Art"],
+            photography: ["Fine Art", "Landscape", "Portrait"]
+        };
+
+        const categorySelect = document.getElementById("category");
+        const subCategorySelect = document.getElementById("sub_category");
+
+        categorySelect.addEventListener("change", function () {
+            const selectedCategory = this.value;
+
+            subCategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+
+            if (selectedCategory && subCategoryMap[selectedCategory]) {
+                subCategorySelect.style.display = "inline";
+                subCategoryMap[selectedCategory].forEach(sub => {
+                    const option = document.createElement("option");
+                    option.value = sub.toLowerCase().replace(/\s+/g, "_");
+                    option.textContent = sub;
+                    subCategorySelect.appendChild(option);
+                });
+            } else {
+                subCategorySelect.style.display = "none";
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            let backdrop = null;
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                
+                if (sidebar.classList.contains('show')) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'offcanvas-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                    
+                    backdrop.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        this.remove();
+                    });
+                } else if (backdrop) {
+                    backdrop.remove();
+                }
+            });
+
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('show');
+                    if (backdrop) {
+                        backdrop.remove();
+                        backdrop = null;
+                    }
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+        });
+    </script>
+</body>
+</html>

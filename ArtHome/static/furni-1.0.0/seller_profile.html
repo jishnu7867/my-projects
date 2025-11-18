@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Profile</title>
+    <style>
+        .profile-container {
+            width: 50%;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+        }
+        .profile-header {
+            text-align: center;
+        }
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .profile-info {
+            margin-top: 20px;
+        }
+        a {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="profile-container">
+        <h1>Seller Profile</h1>
+        <div class="profile-header">
+            {% if seller.p_image %}
+                <img src="{{ seller.profile_picture.url }}" alt="Profile Picture" class="profile-picture" >
+            {% else %}
+                <img src="\media\default_profile.png" alt="No Profile Picture" class="profile-picture">
+            {% endif %}
+            <h1>{{ seller.owner}}</h1>
+            <h2>{{ seller.brand }}</h2>
+            <p>{{ seller.email }}</p>
+        </div>
+
+        <div class="profile-info">
+            <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-field">
+                <p>
+                    <label for="mobile" class="label">Mobile </label>
+                    <span id="mobile">{{ seller.mobile }}</span>
+                </p>
+                
+            </div>
+            <div class="form-field">
+                <p>
+                    <label for="address" class="label">Address </label>
+                    <span id="address">{{ seller.address }}</span>
+                </p>
+            </div>
+            <div class="form-field">
+                <p>
+                    <label for="city" class="label">City </label>
+                    <span id="city">{{ seller.city }}</span>
+                </p>
+            </div>
+            <div class="form-field">
+                <p>
+                    <label for="state" class="label">State </label>
+                    <span id="state">{{ seller.state }}</span>
+                </p>
+            </div>
+            <div class="form-field">
+                <p>
+                    <label for="pincode" class="label">Pincode:</label>
+                    <span id="pincode">{{ seller.pincode }}</span>
+                </p>
+            </div>
+            <!-- <div class="form-field">
+                <p>
+                    <label for="created_at" class="label">Joined:</label>
+                    <span id="created_at">{{ buyer.created_at|date:"F d, Y" }}</span>
+                </p>
+                
+            </div> -->
+
+            <a href="/seller_profile_edit/{{seller.id}}/">Edit profile</a>
+            
+
+            <a href="//">Back</a>
+        </div>
+    </div>
+</body>
+</html>
+
+
+

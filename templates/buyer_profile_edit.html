@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Buyer Profile - ArtCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 -->
+		<link href="{% static 'furni-1.0.0/css/bootstrap.min.css' %}" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Start Section -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-lg border-0 rounded-4 p-4">
+                    <div class="text-center mb-4">
+                        {% if buyer.p_image %}
+                            <img src="{{ buyer.p_image.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% else %}
+                            <img src="/media/default_profile.png" alt="No Profile Picture" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% endif %}
+                        <h4>{{ buyer.fname }} {{ buyer.lname }}</h4>
+                        <p class="text-muted">{{ buyer.email }}</p>
+                    </div>
+
+                    <form action="/buyer_profile_edit_post/" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ buyer.id }}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Mobile</label>
+                            <input type="text" class="form-control" value="{{ buyer.mobile }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="address">Address</label>
+                            <textarea class="form-control" name="address" id="address" rows="3">{{ buyer.address }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="city">City</label>
+                            <input type="text" class="form-control" name="city" id="city" value="{{ buyer.city }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="state">State</label>
+                            <input type="text" class="form-control" name="state" id="state" value="{{ buyer.state }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="pincode">Pincode</label>
+                            <input type="text" class="form-control" name="pincode" id="pincode" value="{{ buyer.pincode }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="p_image">Add/Change Profile Picture</label>
+                            <input type="file" class="form-control" name="p_image" id="p_image">
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/profile_page/" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Section -->
+
+    <!-- Scripts -->
+    <script src="{% static 'furni-1.00/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

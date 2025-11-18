@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Seller Profile</title>
+    <style>
+        .profile-container {
+            width: 50%;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+        }
+        .profile-header {
+            text-align: center;
+        }
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+        .form-field {
+            margin-top: 15px;
+        }
+        .form-field label {
+            font-weight: bold;
+        }
+        .form-field input, .form-field textarea {
+            width: 100%;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            {% if buyer.p_image %}
+                <img src="{{ seller.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+            {% else %}
+                <img src="\media\default_profile.png" alt="No Profile Picture" class="profile-picture">
+            {% endif %}
+            <h1>{{ seller.owner}}</h1>
+            <h2>{{ seller.brand }}</h2>
+            <p>{{ seller.email }}</p>
+        </div>
+
+        <form action="/seller_profile_edit_post/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="id" value="{{seller.id}}">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="mobile">Mobile:</label>
+                <P>{{ seller.mobile }}</P>
+            </div>
+            <div class="form-field">
+                <label for="address">Address:</label>
+                <textarea name="address" id="address">{{ seller.address }}</textarea>
+            </div>
+            <div class="form-field">
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" value="{{ seller.city }}">
+            </div>
+            <div class="form-field">
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state" value="{{ seller.state }}">
+            </div>seller
+            <div class="form-field">
+                <label for="pincode">Pincode:</label>
+                <input type="text" name="pincode" id="pincode" value="{{ seller.pincode }}">
+            </div>
+            <div class="form-field">
+                <label for="profile_picture">Add/Change Profile Picture:</label>
+                <input type="file" name="profile_picture" id="profile_picture" value="{{seller.profile_picture}}">
+            </div>
+
+            <br>
+            <button type="submit">Save changes</button>
+            
+            <a href="/profile_page/">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

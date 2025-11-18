@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Login Type - ArtCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap & Furni CSS -->
+		<link href="{% static 'furni-1.0.0/css/bootstrap.min.css' %}" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="{% static 'furni-1.0.0/css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header (optional if global nav exists) -->
+<header class="site-navbar py-3" role="banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-6">
+                <h2 class="mb-0 site-logo">
+                    <a href="/login/" class="text-black h2 mb-0">ArtCart</a>
+                </h2>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Role Selection Section -->
+<div class="untree_co-section bg-light min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 text-center bg-white p-5 shadow rounded-4">
+                <h2 class="mb-4">Select Your Role</h2>
+                
+                <div class="d-grid gap-3">
+                    <a href="/seller_reg/" class="btn btn-outline-primary btn-lg rounded-pill">I'm a Seller</a>
+                    <a href="/buyer_reg/" class="btn btn-outline-success btn-lg rounded-pill">I'm a Buyer</a>
+                    <a href="/index/" class="btn btn-link mt-3">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer (optional) -->
+<footer class="site-footer mt-auto">
+    <div class="container text-center">
+        <p>&copy; {{ now|date:"Y" }} ArtCart. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- JS -->
+    <script src="{% static 'furni-1.00/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'furni-1.0.0/js/custom.js' %}"></script>
+</body>
+</html>
+

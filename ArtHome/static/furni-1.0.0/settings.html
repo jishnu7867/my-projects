@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtCart - Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* Reuse the same styles from dashboard.html */
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+        }
+        .text-muted {
+            --bs-text-opacity: 1;
+            color: rgb(249 252 255 / 75%) !important;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .user-info p {
+            font-size: 12px;
+            color: #6C757D;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1000;
+                width: 250px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .offcanvas-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+        }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .form-section {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+        <div class="container-fluid">
+            <span class="navbar-brand">ArtCart</span>
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0" id="sidebar">
+                <div class="d-flex flex-column h-100">
+                    <div class="p-3">
+                        <h3 class="d-none d-md-block">ArtCart</h3>
+                        <p class="text-muted d-none d-md-block">Seller Dashboard</p>
+                    </div>
+                    <nav class="nav flex-column flex-grow-1">
+                        <a href="/dashboard/">Overview</a>
+                        <a href="/products/">Products</a>
+                        <a href="/order_list/">Orders</a>
+                        <a href="/customers/">Customers</a>
+                        <a href="/reviews/">Reviews</a>
+                        <a href="/settings/" class="active">Settings</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto main-content px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2>Account Settings</h2>
+                    <div class="user-profile">
+                        {% for seller in seller %}
+                        <img src="{{ seller.profile_picture.url }}" alt="User">
+                        <div class="user-info">
+                            <h4>{{ seller.owner}}</h4>
+                            <p>Art Seller</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Settings Navigation -->
+                    <div class="col-md-3 mb-4">
+                        <div class="content-section">
+                            <div class="nav flex-column nav-pills" id="settingsTabs" role="tablist">
+                                <button class="nav-link active" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile" type="button" role="tab">Profile</button>
+                                <button class="nav-link" id="shop-tab" data-bs-toggle="pill" data-bs-target="#shop" type="button" role="tab">Shop Settings</button>
+                                <button class="nav-link" id="shipping-tab" data-bs-toggle="pill" data-bs-target="#shipping" type="button" role="tab">Shipping</button>
+                                <button class="nav-link" id="payment-tab" data-bs-toggle="pill" data-bs-target="#payment" type="button" role="tab">Payment</button>
+                                <button class="nav-link" id="security-tab" data-bs-toggle="pill" data-bs-target="#security" type="button" role="tab">Security</button>
+                                <button class="nav-link" id="notifications-tab" data-bs-toggle="pill" data-bs-target="#notifications" type="button" role="tab">Notifications</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Content -->
+                    <div class="col-md-9">
+                        <div class="content-section">
+                            <div class="tab-content" id="settingsTabsContent">
+                                <!-- Profile Tab -->
+                                
+                                <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                                    
+                                    <div class="form-section">
+                                        <form action="/seller_p_image/" method="post" enctype="multipart/form-data"></form>
+                                        <h5 class="mb-4">Profile Information</h5>
+                                        {% for seller in seller %}
+                                        <div class="text-center mb-4">
+                                            
+                                            <img src="{{ seller.profile_picture.url }}" class="profile-img mb-3" alt="Profile">
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary me-2">Change Photo</button>
+                                                <button class="btn btn-sm btn-outline-danger">Remove</button>
+                                            </div>
+                                        {% endfor %}
+                                        </form>
+                                        </div>
+                                        
+                                        <form action="/seller_profile_edit_post/" method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            {% for seller in seller %}
+                                            <input type="hidden" name="id" value="{{ seller.id }}">
+                                        
+                                            <div class="mb-3">
+                                                <label for="owner" class="form-label">Owner</label>
+                                                <input type="text" class="form-control" id="owner" name="owner" value="{{ seller.owner }}">
+                                            </div>
+                                             <div class="mb-3">
+                                                <label for="brand" class="form-label">Brand Name</label>
+                                                <input type="text" class="form-control" id="brand" name="brand" value="{{ seller.brand }}">
+                                            </div>
+                                             <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="address" class="form-label">Address</label>
+                                                    <input type="text" class="form-control" id="address" name="address" value="{{seller.address}}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="city" name="city" value="{{ seller.city}}">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="state" class="form-label">State</label>
+                                                    <input type="text" class="form-control" id="state" name="state" value="{{seller.state}}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="pincode" class="form-label">Postal Code</label>
+                                                    <input type="text" class="form-control" id="pincode" name="pincode" value="{{ seller.pincode}}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ seller.email }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="bio" class="form-label">Bio</label>
+                                                <textarea class="form-control" id="bio" name="bio" rows="3">Contemporary artist specializing in abstract landscapes and modern sculptures. My work explores the relationship between nature and human emotion.</textarea>
+                                            </div>
+                                            {% endfor %}
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Social Links</h5>
+                                        <form>
+                                            <div class="mb-3 input-group">
+                                                <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+                                                <input type="text" class="form-control" placeholder="Instagram" value="@janedoeart">
+                                            </div>
+                                            <div class="mb-3 input-group">
+                                                <span class="input-group-text"><i class="bi bi-facebook"></i></span>
+                                                <input type="text" class="form-control" placeholder="Facebook" value="janedoeart">
+                                            </div>
+                                            <div class="mb-3 input-group">
+                                                <span class="input-group-text"><i class="bi bi-twitter"></i></span>
+                                                <input type="text" class="form-control" placeholder="Twitter" value="@janedoeart">
+                                            </div>
+                                            <div class="mb-3 input-group">
+                                                <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                                                <input type="text" class="form-control" placeholder="Website" value="www.janedoeart.com">
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Shop Settings Tab -->
+                                <div class="tab-pane fade" id="shop" role="tabpanel">
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Shop Information</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="shopName" class="form-label">Shop Name</label>
+                                                <input type="text" class="form-control" id="shopName" value="Jane Doe Art Studio">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="shopDescription" class="form-label">Shop Description</label>
+                                                <textarea class="form-control" id="shopDescription" rows="3">Welcome to my art studio! I create unique abstract and contemporary artworks that bring emotion and life to any space. Each piece is handcrafted with care and attention to detail.</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="shopPolicy" class="form-label">Shop Policy</label>
+                                                <textarea class="form-control" id="shopPolicy" rows="5">**Returns & Exchanges**
+I gladly accept returns and exchanges for damaged items. Contact me within 7 days of delivery and ship items back within 14 days of delivery.
+
+**Shipping**
+I ship within 3 business days after receiving your order. Delivery times vary by location.
+
+**Custom Orders**
+I accept custom orders. Contact me to discuss your ideas and timeline.</textarea>
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Shipping Tab -->
+                                <div class="tab-pane fade" id="shipping" role="tabpanel">
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Shipping Options</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Shipping Regions</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="usShipping" checked>
+                                                    <label class="form-check-label" for="usShipping">United States</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="caShipping" checked>
+                                                    <label class="form-check-label" for="caShipping">Canada</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ukShipping">
+                                                    <label class="form-check-label" for="ukShipping">United Kingdom</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="euShipping">
+                                                    <label class="form-check-label" for="euShipping">Europe</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="worldwideShipping">
+                                                    <label class="form-check-label" for="worldwideShipping">Worldwide</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="processingTime" class="form-label">Processing Time</label>
+                                                <select class="form-select" id="processingTime">
+                                                    <option>1 business day</option>
+                                                    <option>1-2 business days</option>
+                                                    <option selected>1-3 business days</option>
+                                                    <option>3-5 business days</option>
+                                                    <option>1-2 weeks</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Shipping Methods</label>
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between">
+                                                            <h6>Standard Shipping</h6>
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox" id="standardShipping" checked>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <label class="form-label">Price</label>
+                                                            <input type="text" class="form-control" value="$5.99">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between">
+                                                            <h6>Express Shipping</h6>
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox" id="expressShipping" checked>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <label class="form-label">Price</label>
+                                                            <input type="text" class="form-control" value="$12.99">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between">
+                                                            <h6>Free Shipping</h6>
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox" id="freeShipping">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <label class="form-label">Minimum Order</label>
+                                                            <input type="text" class="form-control" value="$100" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Tab -->
+                                <div class="tab-pane fade" id="payment" role="tabpanel">
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Payment Methods</h5>
+                                        <div class="alert alert-info">
+                                            <i class="bi bi-info-circle-fill me-2"></i> ArtCart handles all payment processing securely. You don't need to set up separate payment accounts.
+                                        </div>
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h6 class="mb-0">Payout Method</h6>
+                                                    <button class="btn btn-sm btn-outline-primary">Change</button>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-bank fs-3 me-3"></i>
+                                                    <div>
+                                                        <p class="mb-0">Bank Account</p>
+                                                        <small class="text-muted">****7890 · Chase Bank</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h6 class="mb-0">Payout Schedule</h6>
+                                                    <button class="btn btn-sm btn-outline-primary">Change</button>
+                                                </div>
+                                                <p class="mb-0">Monthly payouts on the last day of each month</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Security Tab -->
+                                <div class="tab-pane fade" id="security" role="tabpanel">
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Change Password</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="currentPassword" class="form-label">Current Password</label>
+                                                <input type="password" class="form-control" id="currentPassword">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="newPassword" class="form-label">New Password</label>
+                                                <input type="password" class="form-control" id="newPassword">
+                                                <div class="form-text">Must be at least 8 characters long</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                                <input type="password" class="form-control" id="confirmPassword">
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Update Password</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Two-Factor Authentication</h5>
+                                        <div class="alert alert-warning">
+                                            <i class="bi bi-exclamation-triangle-fill me-2"></i> Two-factor authentication is not currently enabled.
+                                        </div>
+                                        <button class="btn btn-primary">Enable Two-Factor Authentication</button>
+                                    </div>
+                                </div>
+
+                                <!-- Notifications Tab -->
+                                <div class="tab-pane fade" id="notifications" role="tabpanel">
+                                    <div class="form-section">
+                                        <h5 class="mb-4">Email Notifications</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="orderNotifications" checked>
+                                                    <label class="form-check-label" for="orderNotifications">New order notifications</label>
+                                                </div>
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="messageNotifications" checked>
+                                                    <label class="form-check-label" for="messageNotifications">Customer messages</label>
+                                                </div>
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="reviewNotifications" checked>
+                                                    <label class="form-check-label" for="reviewNotifications">New reviews</label>
+                                                </div>
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="promoNotifications">
+                                                    <label class="form-check-label" for="promoNotifications">Promotions and tips</label>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="newsletterNotifications" checked>
+                                                    <label class="form-check-label" for="newsletterNotifications">ArtCart newsletter</label>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Save Preferences</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            let backdrop = null;
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                
+                if (sidebar.classList.contains('show')) {
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'offcanvas-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                    
+                    backdrop.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        this.remove();
+                    });
+                } else if (backdrop) {
+                    backdrop.remove();
+                }
+            });
+
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('show');
+                    if (backdrop) {
+                        backdrop.remove();
+                        backdrop = null;
+                    }
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+        });
+    </script>
+</body>
+</html>

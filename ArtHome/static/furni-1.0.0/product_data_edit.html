@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product - ArtCart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      background-color: #343a40;
+      color: white;
+      min-height: 100vh;
+    }
+    .sidebar a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      padding: 10px 15px;
+      display: block;
+    }
+    .sidebar a:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .sidebar a.active {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .content-section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    @media (max-width: 767.98px) {
+      .sidebar {
+        position: fixed;
+        z-index: 1000;
+        width: 250px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0 !important;
+      }
+      .offcanvas-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Header -->
+  <nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+      <span class="navbar-brand">ArtCart</span>
+      <button class="navbar-toggler" type="button" id="sidebarToggle">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 col-lg-2 sidebar px-0" id="sidebar">
+        <div class="d-flex flex-column h-100">
+          <div class="p-3">
+            <h3 class="d-none d-md-block">ArtCart</h3>
+            <p class="text-muted d-none d-md-block">Seller Dashboard</p>
+          </div>
+          <nav class="nav flex-column flex-grow-1">
+            <a href="/dashboard/">Overview</a>
+            <a href="/products/" class="active">Products</a>
+            <a href="/order_list/">Orders</a>
+            <a href="/customers/">Customers</a>
+            <a href="/reviews/">Reviews</a>
+            <a href="/settings/">Settings</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main class="col-md-9 col-lg-10 ms-sm-auto main-content px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h2>Edit Product</h2>
+        </div>
+
+        <!-- Edit Product Form -->
+        <div class="content-section">
+          <form action="/product_edit_post/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{seller.id}}">
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{seller.title}}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="category" required>
+                  <option value="">-- Select Category --</option>
+                  <option value="painting" {% if seller.category == "painting" %}selected{% endif %}>Painting</option>
+                  <option value="sculpture" {% if seller.category == "sculpture" %}selected{% endif %}>Sculpture</option>
+                  <option value="drawing" {% if seller.category == "drawing" %}selected{% endif %}>Drawing</option>
+                  <option value="digital_art" {% if seller.category == "digital_art" %}selected{% endif %}>Digital Art</option>
+                  <option value="photography" {% if seller.category == "photography" %}selected{% endif %}>Photography</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="sub_category" class="form-label">Sub Category</label>
+                <select class="form-select" id="sub_category" name="sub_category">
+                  <option value="">-- Select Subcategory --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" name="description" rows="3">{{ seller.description }}</textarea>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="qty" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="qty" name="qty" value="{{seller.qty}}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="price" class="form-label">Price ($)</label>
+                <input type="text" class="form-control" id="price" name="price" value="{{seller.price}}" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="dimensions" class="form-label">Dimensions</label>
+              <input type="text" class="form-control" id="dimensions" name="dimensions" value="{{seller.dimensions}}">
+            </div>
+
+            <div class="mb-3">
+              <label for="images" class="form-label">Upload Images</label>
+              <input type="file" class="form-control" id="images" name="images">
+              {% if seller.images %}
+                <small class="text-muted">Current: <img src="{{seller.images.url}}" width="80" class="ms-2 rounded"></small>
+              {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Update</button>
+            <a href="/products/" class="btn btn-secondary ms-2">Cancel</a>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const subCategoryMap = {
+      painting: ["Landscape", "Portrait", "Abstract", "Still Life"],
+      sculpture: ["Figurative", "Abstract"],
+      drawing: ["Pencil", "Charcoal", "Ink"],
+      digital_art: ["Digital Illustration", "3D Art"],
+      photography: ["Fine Art", "Landscape", "Portrait"]
+    };
+
+    const categorySelect = document.getElementById("category");
+    const subCategorySelect = document.getElementById("sub_category");
+
+    function populateSubcategories(selectedCategory, preselected) {
+      subCategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+      if (selectedCategory && subCategoryMap[selectedCategory]) {
+        subCategoryMap[selectedCategory].forEach(sub => {
+          const option = document.createElement("option");
+          option.value = sub.toLowerCase().replace(/\s+/g, "_");
+          option.textContent = sub;
+          if (preselected === option.value) option.selected = true;
+          subCategorySelect.appendChild(option);
+        });
+      }
+    }
+
+    // Initialize with pre-selected category + subcategory
+    document.addEventListener("DOMContentLoaded", function () {
+      populateSubcategories("{{seller.category}}", "{{seller.sub_category}}");
+    });
+
+    categorySelect.addEventListener("change", function () {
+      populateSubcategories(this.value, "");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Registration</title>
+</head>
+<body>
+    <form action="/seller_reg_post/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="brand">Brand</label>
+        <input type="text" name="brand" id="brand"><br>
+
+        <label for="owner">Owner</label>
+        <input type="text" name="owner" id="owner"><br>
+
+        <label for="address">Adress</label>
+        <input type="text" name="address" id="address"><br>
+
+        <label for="profile_picture">Profie picture</label>
+        <input type="file" name="profile_picture" id="profile_picture"><br>
+
+        <label for="email">Email ID</label>
+        <input type="text" name="email" id="email"><br>
+
+        <label for="mob">Mobile</label>
+        <input type="number" name="mob" id="mob"><br>
+
+        <label for="password">Password</label>
+        <input type="text" name="password" id="password"><br><br>
+
+        <input type="submit" value="Sign Up">
+
+
+
+    </form>
+    
+</body>
+</html> -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Registration - ArtCart</title>
+    <link rel="stylesheet" href="{% static 'seller_reg/css/register.css' %}">
+</head>
+<body>
+    <div class="register-container">
+        <h2>Seller Registration</h2>
+        <form method="POST" enctype="multipart/form-data" action="/seller_reg_post/">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="brand">Brand</label>
+                <input type="text" name="brand" id="brand" required>
+            </div>
+
+            <div class="input-group">
+                <label for="owner">Owner</label>
+                <input type="text" name="owner" id="owner" required>
+            </div>
+
+            <div class="input-group">
+                <label for="address">Address</label>
+                <input type="text" name="address" id="address" required>
+            </div>
+
+            <div class="input-group">
+                <label for="profile_picture">Profile Picture</label>
+                <input type="file" name="profile_picture" id="profile_picture" accept="image/*">
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+
+            <div class="input-group">
+                <label for="mob">Mobile</label>
+                <input type="text" name="mob" id="mob" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <p class="login-link">Already a seller? <a href="{% url 'login' %}">Login here</a></p>
+    </div>
+</body>
+</html>

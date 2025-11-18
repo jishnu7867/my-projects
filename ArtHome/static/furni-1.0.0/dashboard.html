@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtCart - Seller Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+        }
+        .text-muted {
+            --bs-text-opacity: 1;
+            color: rgb(249 252 255 / 75%) !important;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .user-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .user-info p {
+            font-size: 12px;
+            color: #6C757D;
+        }
+        
+        .notification-icon {
+            position: relative;
+            margin-right: 20px;
+            font-size: 20px;
+            color: var(--dark-color);
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .stat-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5);
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: fixed;
+                z-index: 1000;
+                width: 250px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .offcanvas-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Header -->
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+        <div class="container-fluid">
+            <span class="navbar-brand">ArtCart</span>
+            <button class="navbar-toggler" type="button" id="sidebarToggle">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar px-0" id="sidebar">
+                <div class="d-flex flex-column h-100">
+                    <div class="p-3">
+                        <h3 class="d-none d-md-block">ArtCart</h3>
+                        <p class="text-muted d-none d-md-block">Seller Dashboard</p>
+                    </div>
+                    <nav class="nav flex-column flex-grow-1">
+                        <a href="/dashboard/" class="active">Overview</a>
+                        <a href="/products/">Products</a>
+                        <a href="/order_list/">Orders</a>
+                        <a href="/customers/">Customers</a>
+                        <a href="/reviews/">Reviews</a>
+                        <!-- <a href="/reanings/">Earnings</a> -->
+                        <a href="/settings/">Settings</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto main-content px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2>Seller Dashboard</h2>
+                    <div class="user-profile">
+                        {% for seller in seller %}
+                        <img src="{{ seller.profile_picture.url }}" alt="User">
+                        <div class="user-info">
+                            <h4>{{ seller.owner}}</h4>
+                            <p>Art Seller</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <div class="stat-card bg-primary text-white">
+                            <h5>Total Sales</h5>
+                            <h3>$4,820</h3>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <div class="stat-card bg-success text-white">
+                            <h5>Orders</h5>
+                            <h3>{{order_count}}</h3>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        
+                        <div class="stat-card bg-info text-white">
+                            <h5>Products</h5>
+                            <h3>{{product_count}}</h3>
+
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <div class="stat-card bg-warning text-dark">
+                            <h5>Pending Orders</h5>
+                            <h3>5</h3>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <!-- Orders Table -->
+                <div class="content-section">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in orders %}
+                                <tr>
+                                    <td>{{ o.id }}</td>
+                                    <td>{{ o.fname}} {{o.lname}}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            
+                                            <span>{{ o.product.category}} {{o.product.sub_category}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ o.created_at|date:"F j, Y, g:i a" }}</td>
+                                    <td>{{ o.product.price }}</td>
+                                    <td><span class="badge bg-warning text-dark status-badge">{{ o.status }}</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">Manage</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                             
+                            </tbody>
+                        </table>
+                    </div>
+
+                <!-- Your Artworks -->
+                <div class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Your Artworks</h4>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Manage All</a>
+                    </div>
+                    
+                    <div class="row">
+                        {% for p in product %}
+                        <div class="col-6 col-md-4 col-lg-3 mb-4">
+                            <div class="card h-100">
+                                <img src="{{p.images.url}}" class="card-img-top" alt="Artwork">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{p.title}}</h5>
+                                    <p class="card-text">${{p.price}} · {{p.order_product.count}}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="badge bg-primary">{{p.category}}</span>
+                                        <span class="text-success">In stock</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        
+                        
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            let backdrop = null;
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                
+                if (sidebar.classList.contains('show')) {
+                    // Create backdrop
+                    backdrop = document.createElement('div');
+                    backdrop.className = 'offcanvas-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                    
+                    // Click backdrop to close sidebar
+                    backdrop.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        this.remove();
+                    });
+                } else if (backdrop) {
+                    backdrop.remove();
+                }
+            });
+
+            // Adjust column sizes on resize
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('show');
+                    if (backdrop) {
+                        backdrop.remove();
+                        backdrop = null;
+                    }
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+        });
+    </script>
+</body>
+</html>

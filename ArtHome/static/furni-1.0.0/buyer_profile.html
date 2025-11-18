@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buyer Profile - ArtCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Styles -->
+    <link href="{% static 'furni-1.0.0/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'furni-1.0.0/css/style.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Start Navigation -->
+<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/index/">ArtHome<span>.</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsFurni">
+            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/product_list/">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+            </ul>
+            <ul class="custom-navbar-cta navbar-nav ms-4">
+                <li><a class="nav-link" href="/profile_page/"><img src="{% static 'furni-1.0.0/images/user.svg' %}" alt="User"></a></li>
+                <li><a class="nav-link" href="/view_cart/"><img src="{% static 'furni-1.0.0/images/cart.svg' %}" alt="Cart"></a></li>
+                <li><a class="nav-link" href="/orders/">Orders</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navigation -->
+
+<!-- Start Profile Section -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-body text-center">
+                    {% if buyer.p_image %}
+                        <img src="{{ buyer.p_image.url }}" alt="Profile Picture" class="rounded-circle mb-3" width="130" height="130">
+                    {% else %}
+                        <img src="/media/default_profile.png" alt="No Profile Picture" class="rounded-circle mb-3" width="130" height="130">
+                    {% endif %}
+                    <h3 class="card-title">{{ buyer.fname }} {{ buyer.lname }}</h3>
+                    <p class="text-muted">{{ buyer.email }}</p>
+                </div>
+                <hr>
+                <div class="card-body px-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <strong>Mobile:</strong> {{ buyer.mobile }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Address:</strong> {{ buyer.address }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>City:</strong> {{ buyer.city }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>State:</strong> {{ buyer.state }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Pincode:</strong> {{ buyer.pincode }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Joined:</strong> {{ buyer.created_at|date:"F d, Y" }}
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-white border-0 mt-3 pb-4">
+                    <a href="/buyer_profile_edit/{{ buyer.id }}/" class="btn btn-primary me-3">Edit Profile</a>
+                    <a href="/index/" class="btn btn-outline-secondary">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Profile Section -->
+
+<!-- Footer -->
+<footer class="footer-section mt-5">
+    <div class="container text-center">
+        <p class="text-muted">&copy; <script>document.write(new Date().getFullYear());</script> ArtCart. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static 'furni-1.0.0/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'furni-1.0.0/js/custom.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+  <!-- Bootstrap & CSS -->
+  <!-- <link  href="{% static 'furni-1.0.0/css/font-awesome.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'furni-1.0.0/css/font-awesome.min.css' %}"> -->
+  <link href="{% static 'furni-1.0.0/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="{% static 'furni-1.0.0/css/tiny-slider.css' %}" rel="stylesheet">
+  <link href="{% static 'furni-1.0.0/css/style.css' %}" rel="stylesheet">
+  
+  <title>Orders</title>
+</head>
+
+	<body>
+
+		<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="/index/">ArtHome<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+						<li >
+							<a class="nav-link" href="/index/">Home</a>
+						</li>
+						<li><a class="nav-link" href="/product_list/">Shop</a></li>
+						<li class=""><a class="nav-link" href="/about/">About us</a></li>
+						<li><a class="nav-link" href="/services/">Services</a></li>
+						<li><a class="nav-link" href="/blog/">Blog</a></li>
+						<li><a class="nav-link" href="/contact/">Contact us</a></li>
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="/profile_page/"><img src="{% static 'furni-1.0.0/images/user.svg' %}"></a></li>
+						<li><a class="nav-link" href="/view_cart/"><img src="{% static 'furni-1.0.0/images/cart.svg' %}"></a></li>
+						<li><a class="nav-link" href="/orders/">Orders</a></li>
+
+					</ul>
+				</div>
+			</div>
+				
+		</nav>
+		<!-- End Header/Navigation -->
+<!-- Orders List Section -->
+<div class="untree_co-section bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">My Orders</h2>
+
+    <div class="list-group shadow-sm">
+      {% for i in orders %}
+      <div class="list-group-item list-group-item-action py-4">
+        <div class="row align-items-center">
+
+          <!-- Product Image -->
+          <div class="col-md-2 col-3 text-center">
+            <img src="{{ i.product.images.url }}" alt="{{ i.product.title }}"
+              class="img-fluid rounded shadow-sm"
+              style="width: 100px; height: 100px; object-fit: cover;">
+          </div>
+
+          <!-- Product Details + Review -->
+          <div class="col-md-7 col-9">
+            <h5 class="mb-1">{{ i.product.title }}</h5>
+            <p class="mb-1 text-muted small">{{ i.product.category }} - {{ i.product.sub_category }}</p>
+            <p class="mb-1 text-muted small">{{ i.product.description|truncatechars:100 }}</p>
+            <div class="mt-2 mb-3">
+              <span class="badge bg-secondary">{{ i.status }}</span>
+              <small class="text-muted ms-3">Ordered on: {{ i.created_at|date:"F j, Y, g:i a" }}</small>
+            </div>
+
+            <!-- Review Form -->
+            <form action="{% url 'review_post' %}" method="post" class="row contact-form">
+              {% csrf_token %}
+			    <input type="hidden" name="order_id" value="{{ i.id }}">
+				<input type="hidden" name="product_id" value="{{ i.product.id }}">
+			  <div class="star-rating">
+              <fieldset>
+				<input type="radio" id="star5" name="rating" value="5">
+				<label for="star5" class="full" title="Awesome!">
+							5 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i></label><br>
+				<input type="radio" id="star4" name="rating" value="4"><label for="star4" class="full" >
+					    	4 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+				</label><br>
+				<input type="radio" id="star3" name="rating" value="3"><label for="star3" class="full" >
+					        3 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+				</label> <br>
+				<input type="radio" id="star2" name="rating" value="2"><label for="star2" class="full" >
+					        2 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+				</label><br>
+				<input type="radio" id="star1" name="rating" value="1"><label for="star1" class="full" >
+							1 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i></label><br>
+			  </fieldset>
+              </div>
+              <div class="col-md-12 mt-5">
+				<div class="form-group">
+					<textarea name="comment" id="comment" rows="1" class="form-control"
+					placeholder="Write your review..." required></textarea>
+				</div>
+			  </div>
+              <div class="col-md-2 d-grid">
+                 <button type="submit" class="btn btn-primary btn-sm" style="padding: 4px 8px; font-size: 12px;">
+					Submit
+				</button>
+              </div>
+              <input type="hidden" name="order_id" value="{{ i.id }}">
+              <input type="hidden" name="product_id" value="{{ i.product.id }}">
+            </form>
+          </div>
+
+          <!-- Reorder Button -->
+          <div class="col-md-3 text-end mt-3 mt-md-0">
+            <form action="{% url 'single_product' i.product.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-redo me-1"></i> Reorder
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-5 bg-white rounded shadow-sm">
+        <p class="mb-0">No orders found.</p>
+      </div>
+      {% endfor %}
+    </div>
+
+	<!-- Pagination -->
+	<div>
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-center">
+                            {% if orders.has_previous %} 
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ orders.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in orders.paginator.page_range %}
+                                {% if orders.number == num %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{num}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if orders.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ orders.next_page_number }} " tabindex="-1">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+
+		</nav>
+		<a href="/orders/" class="btn btn-secondary">Cancel</a>
+	</div>
+  </div>
+</div>
+
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+				<!-- <div class="sofa-img">
+					<img src="/static/furni-1.0.0/images/artcart_4.jpg" alt="Image" class="img-fluid">
+				</div> -->
+
+				<!-- <div class="row">
+					<div class="col-lg-8">
+						<div class="subscription-form">
+							<h3 class="d-flex align-items-center"><span class="me-1"><img src="/static/furni-1.0.0/images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
+
+							<form action="#" class="row g-3">
+								<div class="col-auto">
+									<input type="text" class="form-control" placeholder="Enter your name">
+								</div>
+								<div class="col-auto">
+									<input type="email" class="form-control" placeholder="Enter your email">
+								</div>
+								<div class="col-auto">
+									<button class="btn btn-primary">
+										<span class="fa fa-paper-plane"></span>
+									</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div> -->
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">ArtCart<span>.</span></a></div>
+							<p class="mb-4">
+								Discover and own unique, original artworks from emerging and established artists across India. ArtCart connects creators and collectors through a beautifully curated platform where every piece tells a story. Explore paintings, sculptures, digital art, and more — all crafted with passion and purpose.
+							</p>
+
+						<ul class="list-unstyled custom-social">
+							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
+						</ul>
+					</div>
+
+					<div class="col-lg-8">
+						<div class="row links-wrap">
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="about">About us</a></li>
+									<li><a href="services">Services</a></li>
+									<li><a href="/blog/">Blog</a></li>
+									<li><a href="/contact/">Contact us</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Support</a></li>
+									<li><a href="#">Knowledge base</a></li>
+									<li><a href="#">Live chat</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Jobs</a></li>
+									<li><a href="#">Our team</a></li>
+									<li><a href="#">Leadership</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Paintings</a></li>
+									<li><a href="#">Digital Art</a></li>
+									<li><a href="#">Photography</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="border-top copyright">
+					<div class="row pt-4">
+						<div class="col-lg-6">
+							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!-- License information: https://untree.co/license/ -->
+            </p>
+						</div>
+
+						<div class="col-lg-6 text-center text-lg-end">
+							<ul class="list-unstyled d-inline-flex ms-auto">
+								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
+
+
+		<script src="{% static 'furni-1.0.0/js/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'furni-1.0.0/js/tiny-slider.js' %}"></script>
+		<script src="{% static 'furni-1.0.0/js/custom.js' %}"></script>
+	</body>
+</html>
