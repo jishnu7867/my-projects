@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - LensRent</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: #0056b3;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .logo span {
+            color: #ff6b6b;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        nav ul li a:hover {
+            color: #007bff;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-actions a {
+            margin-left: 15px;
+        }
+        
+        /* Registration Section */
+        .registration-section {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            justify-content: center;   /* horizontal center */
+            align-items: center;       /* vertical center */
+            padding: 60px 0;
+        }
+        .registration-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;   /* ⬅️ this centers it horizontally */
+        }
+                
+        .registration-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .registration-header h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .registration-header p {
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+        
+        .terms input {
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        
+        .terms label {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .terms a {
+            color: #007bff;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 30px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #fff;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .user-actions {
+                margin-top: 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .registration-container {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .registration-header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Lens<span>Rent</span></div>
+            <nav>
+                <ul>
+                    <li><a href="/index/">Home</a></li>
+                    <li><a href="browse.html">Browse Items</a></li>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="/login/" class="btn">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Registration Section -->
+    <section class="registration-section">
+        <div class="container">
+            <div class="registration-container ">
+                <div class="registration-header">
+                    <h1>Create Your Account</h1>
+                    <p>Join LensRent to start renting or listing camera equipment</p>
+                </div>
+                
+                <div class="success-message" id="success-message">
+                    Registration successful! Redirecting to your dashboard...
+                </div>
+                
+                <form id="register-form" action="/register_post/" method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Name -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" id="fname" name="fname" required>
+                            <div class="error-message" id="fname-error">Please enter your first name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" id="lname" name="lname" required>
+                            <div class="error-message" id="lname-error">Please enter your last name</div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message" id="email-error">Please enter a valid email</div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <div class="error-message" id="phone-error">Please enter a valid 10-digit phone number</div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" required>
+                        <div class="error-message" id="address-error">Please enter your address</div>
+                    </div>
+
+                    <!-- City + Pincode -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required>
+                            <div class="error-message" id="city-error">Please enter your city</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">ZIP Code</label>
+                            <input type="text" id="pincode" name="pincode" required>
+                            <div class="error-message" id="pincode-error">Please enter a valid 6-digit pincode</div>
+                        </div>
+                    </div>
+
+                    <!-- User Type -->
+                    <div class="form-group">
+                        <label for="type">User Type</label>
+                        <select id="type" name="type" required>
+                            <option value="">-- Select Type --</option>
+                            <!-- <option value="renter">Renter</option>
+                            <option value="lender">Lender</option> -->
+                            <option value="both">User</option>
+                        </select>
+                        <div class="error-message" id="type-error">Please select a user type</div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                            <div class="error-message" id="password-error">Password must be at least 8 characters, with one number and one special character</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" id="confirm_password" name="confirm_password" required>
+                            <div class="error-message" id="confirm-password-error">Passwords do not match</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>LensRent</h3>
+                    <p>Your trusted platform for camera and accessories rentals. Connecting photographers with the gear they need.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="browse.html">Browse Items</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 LensRent. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.getElementById("register-form").addEventListener("submit", function(event) {
+        let valid = true;
+
+        // First name
+        if (document.getElementById("fname").value.trim() === "") {
+            document.getElementById("fname-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("fname-error").style.display = "none";
+        }
+
+        // Last name
+        if (document.getElementById("lname").value.trim() === "") {
+            document.getElementById("lname-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("lname-error").style.display = "none";
+        }
+
+        // Email
+        let email = document.getElementById("email").value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById("email-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("email-error").style.display = "none";
+        }
+
+        // Phone
+        let phone = document.getElementById("phone").value.trim();
+        if (!/^\d{10}$/.test(phone)) {
+            document.getElementById("phone-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("phone-error").style.display = "none";
+        }
+
+        // Address
+        if (document.getElementById("address").value.trim() === "") {
+            document.getElementById("address-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("address-error").style.display = "none";
+        }
+
+        // City
+        if (document.getElementById("city").value.trim() === "") {
+            document.getElementById("city-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("city-error").style.display = "none";
+        }
+
+        // Pincode
+        let pincode = document.getElementById("pincode").value.trim();
+        if (!/^\d{6}$/.test(pincode)) {
+            document.getElementById("pincode-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("pincode-error").style.display = "none";
+        }
+
+        // User type
+        if (document.getElementById("type").value === "") {
+            document.getElementById("type-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("type-error").style.display = "none";
+        }
+
+        // Password
+        let password = document.getElementById("password").value.trim();
+        let confirmPassword = document.getElementById("confirm_password").value.trim();
+        let passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
+        if (!passwordPattern.test(password)) {
+            document.getElementById("password-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("password-error").style.display = "none";
+        }
+
+        // Confirm password
+        if (password !== confirmPassword) {
+            document.getElementById("confirm-password-error").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("confirm-password-error").style.display = "none";
+        }
+
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <title>Add Product - CamRent</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="/index/">Cam<span>Rent</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="/index/" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/products/" class="nav-link">Equipments</a></li>
+            <li class="nav-item active"><a href="/add_product/" class="nav-link">Add Product</a></li>
+            <li class="nav-item"><a href="/logout/" class="nav-link">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <!-- Hero Section -->
+    <div class="hero-wrap ftco-degree-bg" style="background-image: url('{% static "images/camera-bg.jpg" %}');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters justify-content-center align-items-center">
+          <div class="col-lg-8 ftco-animate text-center">
+            <h1 class="mb-4 text-white">Add New Equipment</h1>
+            <p class="text-light">Fill out the details below to list your camera, lens, or accessory for rent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Add Form -->
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 ftco-animate">
+            <div class="card shadow-lg rounded">
+              <div class="card-body p-5">
+                <h3 class="mb-4 text-center">Add Product</h3>
+                <form method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  
+                  <div class="form-group mb-3">
+                    <label for="title">Product Title</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="Enter product title" required>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" class="form-control" required>
+                      <option value="">-- Select Category --</option>
+                      <option value="Camera">Camera</option>
+                      <option value="Lens">Lens</option>
+                      <option value="Drone">Drone</option>
+                      <option value="Lighting">Lighting</option>
+                      <option value="Accessory">Accessory</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="subcategory">Subcategory</label>
+                    <input type="text" id="subcategory" name="subcategory" class="form-control" placeholder="Eg. DSLR, Mirrorless, Zoom Lens">
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="price">Price (₹/day)</label>
+                    <input type="number" id="price" name="price" class="form-control" placeholder="Enter price per day" required>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" name="stock" class="form-control" placeholder="Available quantity" required>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="image">Upload Image</label>
+                    <input type="file" id="image" name="image" class="form-control-file" accept="image/*" required>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" placeholder="Enter detailed description"></textarea>
+                  </div>
+
+                  <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary px-5 py-2">Add Product</button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <h5 class="text-uppercase mb-3">CamRent</h5>
+            <p>List and rent professional camera gear easily with us.</p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5 class="text-uppercase mb-3">Quick Links</h5>
+            <ul class="list-unstyled">
+              <li><a href="/index/" class="text-light">Home</a></li>
+              <li><a href="/products/" class="text-light">Products</a></li>
+              <li><a href="/about/" class="text-light">About</a></li>
+              <li><a href="/contact/" class="text-light">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5 class="text-uppercase mb-3">Contact</h5>
+            <p><i class="fa fa-map-marker me-2"></i> Palakkad, Kerala</p>
+            <p><i class="fa fa-envelope me-2"></i> support@camrent.com</p>
+            <p><i class="fa fa-phone me-2"></i> +91 98765 43210</p>
+          </div>
+        </div>
+        <div class="text-center mt-3 border-top pt-3">
+          <p class="mb-0">&copy; 2025 CamRent. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

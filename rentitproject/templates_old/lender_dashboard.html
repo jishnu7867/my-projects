@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Dashboard - LensRent</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: #0056b3;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .logo span {
+            color: #ff6b6b;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        nav ul li a:hover {
+            color: #007bff;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-actions a {
+            margin-left: 15px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            margin-top: 30px;
+            gap: 30px;
+        }
+        
+        /* Sidebar */
+        .dashboard-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px 0;
+            height: fit-content;
+        }
+        
+        .user-info {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .user-info .user-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            font-size: 24px;
+        }
+        
+        .user-info h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .user-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .user-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .user-stat {
+            text-align: center;
+        }
+        
+        .user-stat .value {
+            font-weight: bold;
+            font-size: 18px;
+            display: block;
+        }
+        
+        .user-stat .label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .dashboard-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .dashboard-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .dashboard-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .dashboard-menu a:hover, .dashboard-menu a.active {
+            background: #f8f9fa;
+            color: #007bff;
+            border-left: 3px solid #007bff;
+        }
+        
+        .dashboard-menu i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            flex: 1;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 28px;
+            color: #333;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .dashboard-section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            font-size: 18px;
+            color: #333;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .table th {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-active {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-img {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-content {
+            padding: 15px;
+        }
+        
+        .product-content h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid #007bff;
+            color: #007bff;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Earnings Chart */
+        .earnings-chart {
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            gap: 10px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: #007bff;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-height: 10px;
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .dashboard-sidebar {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .user-actions {
+                margin-top: 15px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Lens<span>Rent</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="browse.html">Browse Items</a></li>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-profile">
+                    <div class="user-avatar">JS</div>
+                    <span>John Smith</span>
+                </div>
+                <a href="index.html" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="dashboard-sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">JS</div>
+                    <h2>John Smith</h2>
+                    <p>Lender since Jan 2023</p>
+                    <div class="user-stats">
+                        <div class="user-stat">
+                            <span class="value">4.9</span>
+                            <span class="label">Rating</span>
+                        </div>
+                        <div class="user-stat">
+                            <span class="value">24</span>
+                            <span class="label">Rentals</span>
+                        </div>
+                        <div class="user-stat">
+                            <span class="value">98%</span>
+                            <span class="label">Response</span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="dashboard-menu">
+                    <li><a href="#" class="active"><i>📊</i> Dashboard</a></li>
+                    <li><a href="my-listings.html"><i>📦</i> My Listings</a></li>
+                    <li><a href="rental-requests.html"><i>📋</i> Rental Requests</a></li>
+                    <li><a href="earnings.html"><i>💰</i> Earnings</a></li>
+                    <li><a href="reviews.html"><i>⭐</i> Reviews</a></li>
+                    <li><a href="account-settings.html"><i>⚙️</i> Account Settings</a></li>
+                    <li><a href="item-upload.html"><i>➕</i> Add New Item</a></li>
+                </ul>
+            </div>
+
+            <!-- Content -->
+            <div class="dashboard-content">
+                <div class="dashboard-header">
+                    <h1>Lender Dashboard</h1>
+                    <a href="item-upload.html" class="btn">Add New Item</a>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Active Listings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Pending Requests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Completed Rentals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value">$1,850</div>
+                        <div class="stat-label">Total Earnings</div>
+                    </div>
+                </div>
+
+                <!-- Earnings Overview -->
+                <!-- <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Earnings Overview</h2>
+                        <a href="earnings.html" class="btn btn-small">View Details</a>
+                    </div>
+                    <div class="section-content">
+                        <div class="earnings-chart">
+                            <div class="chart-bar" style="height: 30%;">
+                                <div class="chart-value">$120</div>
+                                <div class="chart-label">Jun</div>
+                            </div>
+                            <div class="chart-bar" style="height: 50%;">
+                                <div class="chart-value">$200</div>
+                                <div class="chart-label">Jul</div>
+                            </div>
+                            <div class="chart-bar" style="height: 70%;">
+                                <div class="chart-value">$280</div>
+                                <div class="chart-label">Aug</div>
+                            </div>
+                            <div class="chart-bar" style="height: 90%;">
+                                <div class="chart-value">$360</div>
+                                <div class="chart-label">Sep</div>
+                            </div>
+                            <div class="chart-bar" style="height: 80%;">
+                                <div class="chart-value">$320</div>
+                                <div class="chart-label">Oct</div>
+                            </div>
+                            <div class="chart-bar" style="height: 60%;">
+                                <div class="chart-value">$240</div>
+                                <div class="chart-label">Nov</div>
+                            </div>
+                            <div class="chart-bar" style="height: 40%;">
+                                <div class="chart-value">$160</div>
+                                <div class="chart-label">Dec</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <strong>This Month:</strong> $320
+                            </div>
+                            <div>
+                                <strong>Projected Next Month:</strong> $380
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- Main Tabs Section -->
+                <div class="dashboard-section">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="requests">Rental Requests (3)</div>
+                        <div class="tab" data-tab="active">Active Rentals (2)</div>
+                        <div class="tab" data-tab="listings">My Listings (7)</div>
+                    </div>
+
+                    <!-- Rental Requests Tab -->
+                    <div class="tab-content active" id="requests-tab">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Renter</th>
+                                    <th>Rental Period</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Canon 5D Mark IV</strong><br>
+                                        <small>Requested: Today</small>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div style="width: 30px; height: 30px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; margin-right: 10px;">SJ</div>
+                                            <div>
+                                                Sarah Johnson<br>
+                                                <small>⭐ 4.7 (8 reviews)</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Oct 25 - Oct 30, 2023</td>
+                                    <td>$180</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-success" onclick="handleRentalRequest('approve', '123')">Approve</button>
+                                        <button class="btn btn-small btn-danger" onclick="handleRentalRequest('decline', '123')">Decline</button>
+                                        <button class="btn btn-small btn-secondary">Message</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Sony A7 III</strong><br>
+                                        <small>Requested: 2 days ago</small>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div style="width: 30px; height: 30px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; margin-right: 10px;">MT</div>
+                                            <div>
+                                                Mike Thompson<br>
+                                                <small>⭐ 4.9 (15 reviews)</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Nov 2 - Nov 5, 2023</td>
+                                    <td>$120</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-success" onclick="handleRentalRequest('approve', '124')">Approve</button>
+                                        <button class="btn btn-small btn-danger" onclick="handleRentalRequest('decline', '124')">Decline</button>
+                                        <button class="btn btn-small btn-secondary">Message</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Canon 24-70mm f/2.8</strong><br>
+                                        <small>Requested: 3 days ago</small>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div style="width: 30px; height: 30px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; margin-right: 10px;">AR</div>
+                                            <div>
+                                                Alex Rodriguez<br>
+                                                <small>New Renter</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Oct 28 - Nov 1, 2023</td>
+                                    <td>$90</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-success" onclick="handleRentalRequest('approve', '125')">Approve</button>
+                                        <button class="btn btn-small btn-danger" onclick="handleRentalRequest('decline', '125')">Decline</button>
+                                        <button class="btn btn-small btn-secondary">Message</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Active Rentals Tab -->
+                    <div class="tab-content" id="active-tab">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Renter</th>
+                                    <th>Rental Period</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Nikon D850</strong><br>
+                                        <small>Rented to: Lisa Chen</small>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div style="width: 30px; height: 30px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; margin-right: 10px;">LC</div>
+                                            <div>
+                                                Lisa Chen<br>
+                                                <small>⭐ 4.8 (12 reviews)</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Oct 15 - Oct 22, 2023</td>
+                                    <td>$210</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary">Details</button>
+                                        <button class="btn btn-small btn-warning">Message</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Godox AD200 Pro</strong><br>
+                                        <small>Rented to: David Wilson</small>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div style="width: 30px; height: 30px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; margin-right: 10px;">DW</div>
+                                            <div>
+                                                David Wilson<br>
+                                                <small>⭐ 4.6 (6 reviews)</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Oct 18 - Oct 25, 2023</td>
+                                    <td>$70</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary">Details</button>
+                                        <button class="btn btn-small btn-warning">Message</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- My Listings Tab -->
+                    <div class="tab-content" id="listings-tab">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <a href="item-upload.html" class="btn">Add New Item</a>
+                            <div>
+                                <span>Showing 7 of 7 items</span>
+                            </div>
+                        </div>
+                        <div class="products-grid">
+                            <div class="product-card">
+                                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                <div class="product-content">
+                                    <h3>Canon 5D Mark IV</h3>
+                                    <div class="product-meta">
+                                        <span>DSLR Camera</span>
+                                        <span>⭐ 4.9</span>
+                                    </div>
+                                    <div class="product-price">$90/day</div>
+                                    <div style="display: flex; gap: 5px; margin-top: 10px;">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-card">
+                                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                <div class="product-content">
+                                    <h3>Sony A7 III</h3>
+                                    <div class="product-meta">
+                                        <span>Mirrorless</span>
+                                        <span>⭐ 4.8</span>
+                                    </div>
+                                    <div class="product-price">$95/day</div>
+                                    <div style="display: flex; gap: 5px; margin-top: 10px;">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-card">
+                                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1554048612-7c2e984f61c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                <div class="product-content">
+                                    <h3>Canon 24-70mm f/2.8</h3>
+                                    <div class="product-meta">
+                                        <span>Lens</span>
+                                        <span>⭐ 4.9</span>
+                                    </div>
+                                    <div class="product-price">$45/day</div>
+                                    <div style="display: flex; gap: 5px; margin-top: 10px;">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn btn-secondary">Load More</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Reviews -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Recent Reviews</h2>
+                        <a href="reviews.html" class="btn btn-small">View All</a>
+                    </div>
+                    <div class="section-content">
+                        <div style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee;">
+                            <div style="margin-right: 15px;">
+                                <div style="width: 50px; height: 50px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">MJ</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <strong>Michael Johnson</strong>
+                                    <div>⭐ 5.0</div>
+                                </div>
+                                <p style="margin: 5px 0;">Great experience renting the Canon 5D Mark IV. John was very professional and the equipment was in perfect condition.</p>
+                                <small style="color: #666;">October 15, 2023 • Rental: Canon 5D Mark IV</small>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; padding: 15px;">
+                            <div style="margin-right: 15px;">
+                                <div style="width: 50px; height: 50px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">SG</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <strong>Sarah Green</strong>
+                                    <div>⭐ 4.5</div>
+                                </div>
+                                <p style="margin: 5px 0;">The Sony A7 III worked perfectly for my project. Quick response and smooth pickup process.</p>
+                                <small style="color: #666;">October 10, 2023 • Rental: Sony A7 III</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality for lender dashboard
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+        
+        // Sample function to handle rental request actions
+        function handleRentalRequest(action, requestId) {
+            if (action === 'approve') {
+                alert(`Rental request ${requestId} approved!`);
+                // In a real app, this would update the database and UI
+            } else if (action === 'decline') {
+                if (confirm('Are you sure you want to decline this rental request?')) {
+                    alert(`Rental request ${requestId} declined.`);
+                    // In a real app, this would update the database and UI
+                }
+            }
+        }
+        
+        // Sample function to handle listing actions
+        function handleListingAction(action, listingId) {
+            if (action === 'edit') {
+                // Redirect to edit page
+                window.location.href = `edit-listing.html?id=${listingId}`;
+            } else if (action === 'stats') {
+                // Show statistics modal
+                alert(`Showing statistics for listing ${listingId}`);
+            } else if (action === 'deactivate') {
+                if (confirm('Are you sure you want to deactivate this listing?')) {
+                    alert(`Listing ${listingId} deactivated.`);
+                    // In a real app, this would update the database and UI
+                }
+            }
+        }
+        
+        // Attach event listeners to listing action buttons
+        document.querySelectorAll('.product-card .btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const action = this.textContent.toLowerCase();
+                // In a real app, you would get the listing ID from a data attribute
+                const listingId = '123'; // This would be dynamic
+                handleListingAction(action, listingId);
+            });
+        });
+    </script>
+</body>
+</html>

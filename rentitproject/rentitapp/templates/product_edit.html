@@ -1,0 +1,296 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product - LensRent</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-primary" href="#">Lens<span class="text-danger">Rent</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/product_upload/">List New Item</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/products/">My Listings</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="py-5 bg-light text-center">
+    <div class="container">
+      <h1 class="fw-bold">Edit Product</h1>
+      <p class="text-muted">Update your item details and pricing information</p>
+    </div>
+  </section>
+
+  <!-- Edit Form -->
+  <section class="py-5">
+    <div class="container">
+      <form method="post" action="/product_edit_post/{{ product.id }}/" enctype="multipart/form-data" class="bg-white p-4 shadow rounded">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ product.id }}">
+        
+
+        <div class="mb-4">
+          <h5 class="mb-3"><span class="badge bg-primary me-2">1</span>Basic Information</h5>
+          <div class="mb-3">
+            <label class="form-label">Title *</label>
+            <input type="text" class="form-control" name="title" value="{{ product.title }}" required>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Category *</label>
+              <input type="text" class="form-control" value="{{ product.category|capfirst }}" readonly>
+              <input type="hidden" name="category" value="{{ product.category }}">
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Brand *</label>
+              <input type="text" class="form-control" name="brand" value="{{ product.brand }}" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Model *</label>
+            <input type="text" class="form-control" name="model" value="{{ product.model }}" required>
+          </div>
+          <!-- condition -->
+          <div class="mb-3">
+            <label class="form-label">Condition *</label>
+            <select class="form-select" name="condition" required>
+              <option value="excellent" {% if product.condition == 'excellent' %}selected{% endif %}>Excellent</option>
+              <option value="very-good" {% if product.condition == 'very-good' %}selected{% endif %}>Very Good</option>
+              <option value="fair" {% if product.condition == 'fair' %}selected{% endif %}>Fair</option>
+            </select>
+          </div>
+          <!-- availability -->
+          <div class="mb-3">
+            <label class="form-label">Availability *</label>
+            <select class="form-select" name="availability" required>
+              <option value="available" {% if product.condition == 'available' %}selected{% endif %}>Available</option>
+              <option value="unavailable" {% if product.condition == 'unavailable' %}selected{% endif %}>Currently Unavailable </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description *</label>
+            <textarea name="description" class="form-control" rows="4" required>{{ product.description }}</textarea>
+          </div>
+        </div>
+
+        <!-- features -->
+        <div class="mb-4">
+          <h5 class="mb-3"><span class="badge bg-primary me-2">3</span>Product Features</h5>
+
+          <div id="features-container">
+            {% if features %}
+              {% for f in features %}
+              <div>
+                <p class="text-muted">{{ f.features }}</p>
+              </div>
+                <input type="text" name="features[]" value="{{ f.features }}" class="form-control mb-2">
+              {% endfor %}
+            {% else %}
+              <input type="text" name="features[]" class="form-control mb-2" placeholder="Enter a feature">
+            {% endif %}
+          </div>
+
+          <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addFeature()">Add More Feature</button>
+        </div>
+
+        <!-- Current Image -->
+
+        <div class="mb-4">
+          <h5 class="mb-3"><span class="badge bg-primary me-2">2</span>Product Image</h5>
+          <div class="d-flex align-items-center mb-3">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.title }}" class="rounded shadow-sm me-3" style="width: 120px; height: 120px; object-fit: cover;">
+            {% else %}
+              <img src="{% static 'images/no-image.jpg' %}" class="rounded shadow-sm me-3" style="width: 120px; height: 120px; object-fit: cover;">
+            {% endif %}
+            <div>
+              <label class="form-label">Change Image (optional)</label>
+              <input type="file" name="images" class="form-control" accept="image/*" multiple>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <!-- Pricing -->
+        <div class="mb-4">
+          <h5 class="mb-3"><span class="badge bg-primary me-2">3</span>Pricing & Availability</h5>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Daily Price *</label>
+              <input type="number" class="form-control" name="daily_price" value="{{ product.daily_price }}" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Weekly Price</label>
+              <input type="number" class="form-control" name="weekly_price" value="{{ product.weekly_price }}">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Monthly Price</label>
+              <input type="number" class="form-control" name="monthly_price" value="{{ product.monthly_price }}">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Security Deposit *</label>
+            <input type="number" class="form-control" name="security_deposit" value="{{ product.security_deposit }}" required>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-4">
+        <label class="form-label">Location *</label>
+              <select name="location" class="form-select" required>
+                <option value="">Select a location</option>
+                <option value="thiruvananthapuram" {% if product.location == 'thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
+                <option value="kollam" {% if product.location == 'kollam' %}selected{% endif %}>Kollam</option>
+                <option value="pathanamthitta" {% if product.location == 'pathanamthitta' %}selected{% endif %}>Pathanamthitta</option>
+                <option value="alappuzha" {% if product.location == 'alappuzha' %}selected{% endif %}>Alappuzha</option>
+                <option value="kottayam" {% if product.location == 'kottayam' %}selected{% endif %}>Kottayam</option>
+                <option value="idukki" {% if product.location == 'idukki' %}selected{% endif %}>Idukki</option>
+                <option value="ernamkulam" {% if product.location == 'ernamkulam' %}selected{% endif %}>Ernamkulam</option>
+                <option value="trissur" {% if product.location == 'trissur' %}selected{% endif %}>Trissur</option>
+                <option value="palakkad" {% if product.location == 'palakkad' %}selected{% endif %}>Palakkad</option>
+                <option value="malappuram" {% if product.location == 'malappuram' %}selected{% endif %}>Malappuram</option>
+                <option value="kozhikkode" {% if product.location == 'kozhikkode' %}selected{% endif %}>Kozhikkode</option>
+                <option value="wayanad" {% if product.location == 'wayanad' %}selected{% endif %}>Wayanad</option>
+                <option value="kannur" {% if product.location == 'kannur' %}selected{% endif %}>Kannur</option>
+                <option value="kasaragode" {% if product.location == 'kasaragode' %}selected{% endif %}>Kasaragode</option>
+              </select>
+          <div class="mb-3">
+            <label class="form-label">Delivery Fee</label>
+            <input type="number" class="form-control" name="delivery_fee" value="{{ product.delivery_fee }}">
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-between">
+          <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">Cancel</a>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light pt-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <h5>LensRent</h5>
+          <p>Your trusted platform for renting camera gear.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/" class="text-light">Home</a></li>
+            <li><a href="/product_upload/" class="text-light">List New Item</a></li>
+            <li><a href="/products/" class="text-light">My Listings</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li>Email: support@lensrent.in</li>
+            <li>Phone: +91 98765 43210</li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center border-top pt-3 pb-2">
+        <p class="mb-0">&copy; 2025 LensRent. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+     // Image Upload Functionality
+        const imageUpload = document.getElementById('image-upload');
+        const uploadedImagesContainer = document.getElementById('uploaded-images');
+        const imageUploadArea = document.getElementById('image-upload-area');
+        
+        // Handle file selection
+        imageUpload.addEventListener('change', function(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+        
+        // Handle drag and drop
+        imageUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            imageUploadArea.style.borderColor = '#007bff';
+            imageUploadArea.style.backgroundColor = '#f0f8ff';
+        });
+        
+        imageUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            imageUploadArea.style.borderColor = '#ddd';
+            imageUploadArea.style.backgroundColor = 'transparent';
+        });
+        
+        imageUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            imageUploadArea.style.borderColor = '#ddd';
+            imageUploadArea.style.backgroundColor = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+        
+        function handleFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                if (!file.type.match('image.*')) continue;
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const imagePreview = document.createElement('div');
+                    imagePreview.className = 'image-preview';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'image-remove';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.onclick = function() {
+                        imagePreview.remove();
+                    };
+                    
+                    imagePreview.appendChild(img);
+                    imagePreview.appendChild(removeBtn);
+                    uploadedImagesContainer.appendChild(imagePreview);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        function addFeature() {
+            const container = document.getElementById('features-container');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'features[]';
+            input.className = 'form-control mb-2';
+            input.placeholder = 'Enter a feature';
+            container.appendChild(input);
+        }
+                        
+  </script>
+</body>
+</html>

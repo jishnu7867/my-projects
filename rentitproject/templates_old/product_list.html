@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings - LensRent</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: #0056b3;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+        
+        .btn-outline:hover {
+            background: #007bff;
+            color: #fff;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .logo span {
+            color: #ff6b6b;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        nav ul li a:hover {
+            color: #007bff;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-actions a {
+            margin-left: 15px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            margin-top: 30px;
+            gap: 30px;
+        }
+        
+        /* Sidebar */
+        .dashboard-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px 0;
+            height: fit-content;
+        }
+        
+        .user-info {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .user-info .user-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            font-size: 24px;
+        }
+        
+        .user-info h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .user-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .user-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .user-stat {
+            text-align: center;
+        }
+        
+        .user-stat .value {
+            font-weight: bold;
+            font-size: 18px;
+            display: block;
+        }
+        
+        .user-stat .label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .dashboard-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .dashboard-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .dashboard-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .dashboard-menu a:hover, .dashboard-menu a.active {
+            background: #f8f9fa;
+            color: #007bff;
+            border-left: 3px solid #007bff;
+        }
+        
+        .dashboard-menu i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            flex: 1;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 28px;
+            color: #333;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .dashboard-section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            font-size: 18px;
+            color: #333;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .filter-group select, .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .view-option {
+            padding: 8px 15px;
+            background: #fff;
+            cursor: pointer;
+            border-right: 1px solid #ddd;
+        }
+        
+        .view-option:last-child {
+            border-right: none;
+        }
+        
+        .view-option.active {
+            background: #007bff;
+            color: #fff;
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-header {
+            position: relative;
+        }
+        
+        .product-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .product-content {
+            padding: 15px;
+        }
+        
+        .product-content h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .product-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .product-actions .btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 5px;
+            font-size: 12px;
+        }
+        
+        /* Products Table */
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            display: none;
+        }
+        
+        .products-table th, .products-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .products-table th {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .table-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .pagination ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        .pagination ul li {
+            margin: 0 5px;
+        }
+        
+        .pagination ul li a {
+            display: block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #333;
+        }
+        
+        .pagination ul li a:hover, 
+        .pagination ul li a.active {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .dashboard-sidebar {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .user-actions {
+                margin-top: 15px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Lens<span>Rent</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="browse.html">Browse Items</a></li>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-profile">
+                    <div class="user-avatar">JS</div>
+                    <span>John Smith</span>
+                </div>
+                <a href="index.html" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="dashboard-sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">JS</div>
+                    <h2>John Smith</h2>
+                    <p>Lender since Jan 2023</p>
+                    <div class="user-stats">
+                        <div class="user-stat">
+                            <span class="value">4.9</span>
+                            <span class="label">Rating</span>
+                        </div>
+                        <div class="user-stat">
+                            <span class="value">7</span>
+                            <span class="label">Listings</span>
+                        </div>
+                        <div class="user-stat">
+                            <span class="value">24</span>
+                            <span class="label">Rentals</span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="dashboard-menu">
+                    <li><a href="lender_dashboard.html"><i>📊</i> Dashboard</a></li>
+                    <li><a href="product_list.html" class="active"><i>📦</i> My Listings</a></li>
+                    <li><a href="rental-requests.html"><i>📋</i> Rental Requests</a></li>
+                    <li><a href="earnings.html"><i>💰</i> Earnings</a></li>
+                    <li><a href="reviews.html"><i>⭐</i> Reviews</a></li>
+                    <li><a href="account-settings.html"><i>⚙️</i> Account Settings</a></li>
+                    <li><a href="item-upload.html"><i>➕</i> Add New Item</a></li>
+                </ul>
+            </div>
+
+            <!-- Content -->
+            <div class="dashboard-content">
+                <div class="dashboard-header">
+                    <h1>My Listings</h1>
+                    <a href="item-upload.html" class="btn">Add New Item</a>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Total Listings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Active Listings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value">$1,240</div>
+                        <div class="stat-label">Monthly Earnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value">78%</div>
+                        <div class="stat-label">Booking Rate</div>
+                    </div>
+                </div>
+
+                <!-- Listings Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Manage Your Listings</h2>
+                        <div>
+                            <span>Showing 7 of 7 items</span>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <!-- Filters -->
+                        <div class="filters">
+                            <div class="filter-group">
+                                <label for="status-filter">Status</label>
+                                <select id="status-filter">
+                                    <option value="all">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="category-filter">Category</label>
+                                <select id="category-filter">
+                                    <option value="all">All Categories</option>
+                                    <option value="dslr">DSLR Cameras</option>
+                                    <option value="mirrorless">Mirrorless Cameras</option>
+                                    <option value="lens">Lenses</option>
+                                    <option value="lighting">Lighting</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="sort-by">Sort By</label>
+                                <select id="sort-by">
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="popular">Most Popular</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-small">Apply Filters</button>
+                            </div>
+                        </div>
+
+                        <!-- View Toggle -->
+                        <div class="view-toggle">
+                            <div class="view-option active" data-view="grid">Grid View</div>
+                            <div class="view-option" data-view="table">Table View</div>
+                        </div>
+
+                        <!-- Products Grid -->
+                        <div class="products-grid" id="grid-view">
+                            <!-- Product 1 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-active">Active</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>Canon EOS R5</h3>
+                                    <div class="product-meta">
+                                        <span>Mirrorless Camera</span>
+                                        <span>⭐ 4.9 (24)</span>
+                                    </div>
+                                    <div class="product-price">$105/day</div>
+                                    <div class="product-stats">
+                                        <span>12 rentals</span>
+                                        <span>$1,240 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product 2 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-active">Active</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>Sony A7 III</h3>
+                                    <div class="product-meta">
+                                        <span>Mirrorless Camera</span>
+                                        <span>⭐ 4.8 (18)</span>
+                                    </div>
+                                    <div class="product-price">$95/day</div>
+                                    <div class="product-stats">
+                                        <span>8 rentals</span>
+                                        <span>$760 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product 3 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1554048612-7c2e984f61c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-active">Active</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>Canon 24-70mm f/2.8</h3>
+                                    <div class="product-meta">
+                                        <span>Lens</span>
+                                        <span>⭐ 4.9 (32)</span>
+                                    </div>
+                                    <div class="product-price">$45/day</div>
+                                    <div class="product-stats">
+                                        <span>15 rentals</span>
+                                        <span>$675 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product 4 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1581591524421-d39dc3bb5d47?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-inactive">Inactive</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>Canon EOS Rebel T8i</h3>
+                                    <div class="product-meta">
+                                        <span>DSLR Camera</span>
+                                        <span>⭐ 4.5 (41)</span>
+                                    </div>
+                                    <div class="product-price">$45/day</div>
+                                    <div class="product-stats">
+                                        <span>22 rentals</span>
+                                        <span>$990 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-success">Activate</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product 5 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-active">Active</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>Godox AD200 Pro</h3>
+                                    <div class="product-meta">
+                                        <span>Lighting</span>
+                                        <span>⭐ 4.6 (15)</span>
+                                    </div>
+                                    <div class="product-price">$35/day</div>
+                                    <div class="product-stats">
+                                        <span>9 rentals</span>
+                                        <span>$315 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product 6 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1579972668140-f7da53eee1dc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-pending">Pending Review</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>Manfrotto MT190XPRO3</h3>
+                                    <div class="product-meta">
+                                        <span>Tripod</span>
+                                        <span>⭐ 4.8 (27)</span>
+                                    </div>
+                                    <div class="product-price">$25/day</div>
+                                    <div class="product-stats">
+                                        <span>0 rentals</span>
+                                        <span>$0 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-outline">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product 7 -->
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1601986313622-76e6b4748d63?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                                    <div class="product-status status-active">Active</div>
+                                </div>
+                                <div class="product-content">
+                                    <h3>DJI Ronin-S</h3>
+                                    <div class="product-meta">
+                                        <span>Gimbal</span>
+                                        <span>⭐ 4.7 (19)</span>
+                                    </div>
+                                    <div class="product-price">$40/day</div>
+                                    <div class="product-stats">
+                                        <span>6 rentals</span>
+                                        <span>$240 earned</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                        <button class="btn btn-small btn-danger">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Products Table -->
+                        <table class="products-table" id="table-view">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Price</th>
+                                    <th>Rating</th>
+                                    <th>Rentals</th>
+                                    <th>Earnings</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div class="table-img" style="background-image: url('https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); margin-right: 10px;"></div>
+                                            <div>
+                                                <strong>Canon EOS R5</strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mirrorless Camera</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>$105/day</td>
+                                    <td>⭐ 4.9 (24)</td>
+                                    <td>12</td>
+                                    <td>$1,240</td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div class="table-img" style="background-image: url('https://images.unsplash.com/photo-1552168324-d612d77725e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); margin-right: 10px;"></div>
+                                            <div>
+                                                <strong>Sony A7 III</strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mirrorless Camera</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>$95/day</td>
+                                    <td>⭐ 4.8 (18)</td>
+                                    <td>8</td>
+                                    <td>$760</td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary">Edit</button>
+                                        <button class="btn btn-small btn-warning">Stats</button>
+                                    </td>
+                                </tr>
+                                <!-- More rows would go here -->
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination -->
+                        <div class="pagination">
+                            <ul>
+                                <li><a href="#" class="active">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // View Toggle Functionality
+        const viewOptions = document.querySelectorAll('.view-option');
+        const gridView = document.getElementById('grid-view');
+        const tableView = document.getElementById('table-view');
+        
+        viewOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                viewOptions.forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Show/hide views based on selection
+                const viewType = this.getAttribute('data-view');
+                if (viewType === 'grid') {
+                    gridView.style.display = 'grid';
+                    tableView.style.display = 'none';
+                } else {
+                    gridView.style.display = 'none';
+                    tableView.style.display = 'table';
+                }
+            });
+        });
+        
+        // Filter Functionality
+        document.querySelector('.filters .btn').addEventListener('click', function() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+            const sortBy = document.getElementById('sort-by').value;
+            
+            // In a real application, this would filter and sort the products
+            alert(`Filters applied:\nStatus: ${statusFilter}\nCategory: ${categoryFilter}\nSort: ${sortBy}`);
+        });
+        
+        // Product Action Handlers
+        document.querySelectorAll('.product-actions .btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const action = this.textContent.toLowerCase();
+                const productCard = this.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                
+                if (action === 'edit') {
+                    // Redirect to edit page
+                    window.location.href = `edit-listing.html?product=${encodeURIComponent(productName)}`;
+                } else if (action === 'stats') {
+                    // Show statistics modal
+                    alert(`Showing statistics for ${productName}`);
+                } else if (action === 'deactivate') {
+                    if (confirm(`Are you sure you want to deactivate ${productName}?`)) {
+                        // Update status in UI
+                        const statusElement = productCard.querySelector('.product-status');
+                        statusElement.textContent = 'Inactive';
+                        statusElement.className = 'product-status status-inactive';
+                        
+                        // Change button to activate
+                        this.textContent = 'Activate';
+                        this.className = 'btn btn-small btn-success';
+                        
+                        alert(`${productName} has been deactivated.`);
+                    }
+                } else if (action === 'activate') {
+                    // Update status in UI
+                    const statusElement = productCard.querySelector('.product-status');
+                    statusElement.textContent = 'Active';
+                    statusElement.className = 'product-status status-active';
+                    
+                    // Change button to deactivate
+                    this.textContent = 'Deactivate';
+                    this.className = 'btn btn-small btn-danger';
+                    
+                    alert(`${productName} has been activated.`);
+                }
+            });
+        });
+        
+        // Initialize default view
+        document.querySelector('.view-option.active').click();
+    </script>
+</body>
+</html>

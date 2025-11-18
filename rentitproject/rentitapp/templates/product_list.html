@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Listed Products - LensRent</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-primary" href="#">Lens<span class="text-danger">Rent</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/product_upload/">List New Item</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">My Listings</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="py-5 bg-light text-center">
+    <div class="container">
+      <h1 class="fw-bold">My Listed Products</h1>
+      <p class="text-muted">Manage all your rental listings in one place</p>
+      <a href="/product_upload/" class="btn btn-primary mt-3">+ Add New Product</a>
+    </div>
+  </section>
+
+  <!-- Product Grid -->
+  <section class="py-5">
+    <div class="container">
+      {% if products %}
+      <div class="row g-4">
+        {% for product in products %}
+        <div class="col-md-4 col-lg-3">
+          <div class="card shadow-sm h-100 border-0">
+            <img id="main-image" src="{{ product.images.first.image.url }}" class="img-fluid" style="width: 500px;;" alt="{{ product.title }}">
+
+            <!-- {% for img in product.images.all %}
+                <img src="{{ img.image.url }}" class="card-img-top" alt="{{ product.title }}" style="height:250px; object-fit:cover;"">
+            {% endfor %} -->
+           
+            <div class="card-body">
+              <h5 class="card-title text-truncate">{{ product.title }}</h5>
+              <p class="text-muted small mb-1">{{ product.category }}</p>
+              <p class="fw-bold mb-2">₹{{ product.daily_price }} / day</p>
+              <div class="d-flex justify-content-between">
+                <a href="{% url 'single_product' product.id %}" class="btn btn-info py-2 ml-1">View</a>
+                <a href="{% url 'product_edit' product.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-5">
+        <img src="{% static 'images/empty-box.png' %}" width="160" class="mb-3">
+        <h4 class="text-muted">No products listed yet</h4>
+        <a href="/product_upload/" class="btn btn-primary mt-3">List Your First Product</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light pt-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <h5>LensRent</h5>
+          <p>Your trusted platform for renting camera gear.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/" class="text-light">Home</a></li>
+            <li><a href="/product_upload/" class="text-light">List New Item</a></li>
+            <li><a href="/about/" class="text-light">About Us</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li>Email: support@lensrent.in</li>
+            <li>Phone: +91 98765 43210</li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center border-top pt-3 pb-2">
+        <p class="mb-0">&copy; 2025 LensRent. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

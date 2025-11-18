@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ user.fname }}'s Profile | LensRent</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <style>
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #007bff;
+      margin-bottom: 10px;
+    }
+    .file-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'partials/navbar.html' %}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white text-center">
+          <h4 class="mb-0">My Profile</h4>
+        </div>
+
+        <div class="card-body text-center">
+          <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+
+            <!-- Profile Picture -->
+            <div class="text-center mb-4">
+              {% if user.p_image %}
+                <img src="{{ user.p_image.url }}" id="profilePreview" class="profile-pic" alt="Profile Picture">
+              {% else %}
+                <img src="{% static 'images/default-user.png' %}" id="profilePreview" class="profile-pic" alt="Profile Picture">
+              {% endif %}
+              <br>
+              <input type="file" name="p_image" id="p_image" class="file-input" accept="image/*" disabled>
+              <label for="p_image" id="uploadLabel" class="btn btn-outline-secondary btn-sm d-none">Change Photo</label>
+            </div>
+
+            <!-- User Info -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">First Name</label>
+                <input type="text" name="fname" class="form-control" value="{{ user.fname }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Last Name</label>
+                <input type="text" name="lname" class="form-control" value="{{ user.lname }}" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="{{ user.email }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control" value="{{ user.phone }}" readonly>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Address</label>
+              <textarea name="address" class="form-control" rows="2" readonly>{{ user.address }}</textarea>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-control" value="{{ user.city }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Pincode</label>
+                <input type="number" name="pincode" class="form-control" value="{{ user.pincode }}" readonly>
+              </div>
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label d-block">Account Type</label>
+            <span class="form-control-plaintext">{{ user.type }}</span>
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center">
+              <button type="button" id="editBtn" class="btn btn-outline-primary px-4">Edit Profile</button>
+              <button type="submit" id="saveBtn" class="btn btn-primary px-4 d-none">Save Changes</button>
+              <button type="button" id="cancelBtn" class="btn btn-secondary px-4 d-none">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer text-center text-muted">
+          <small>Member since: {{ user.created_at }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script>
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const form = document.getElementById('profileForm');
+  const fields = form.querySelectorAll('input:not([type=hidden]), textarea');
+  const pImage = document.getElementById('p_image');
+  const uploadLabel = document.getElementById('uploadLabel');
+  const profilePreview = document.getElementById('profilePreview');
+
+  editBtn.addEventListener('click', () => {
+    fields.forEach(f => f.removeAttribute('readonly'));
+    pImage.disabled = false;
+    uploadLabel.classList.remove('d-none');
+    editBtn.classList.add('d-none');
+    saveBtn.classList.remove('d-none');
+    cancelBtn.classList.remove('d-none');
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    window.location.reload();
+  });
+
+  // Live image preview
+  pImage.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => profilePreview.src = e.target.result;
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+</body>
+</html>
