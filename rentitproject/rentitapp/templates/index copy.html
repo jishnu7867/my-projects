@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <title>CamRent - Camera & Accessories Rental</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+    
+  <body>
+	<!-- nav -->
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	<div class="container">
+		<a class="navbar-brand" href="/index/">Cam<span>Rent</span></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+		aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="oi oi-menu"></span> Menu
+		</button>
+
+		<div class="collapse navbar-collapse" id="ftco-nav">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item"><a href="/index/" class="nav-link">Home</a></li>
+			<li class="nav-item"><a href="/about/" class="nav-link">About</a></li>
+			<li class="nav-item"><a href="/services/" class="nav-link">Services</a></li>
+			<li class="nav-item"><a href="/all_products/" class="nav-link">Equipments</a></li>
+			<li class="nav-item"><a href="/product/" class="nav-link">Camera</a></li>
+			<li class="nav-item"><a href="/dashboard_both/" class="nav-link">Dashboard</a></li>
+			<li class="nav-item"><a href="/contact/" class="nav-link">Contact</a></li>
+
+			{% if request.session.lid %}
+			<!-- Show when logged in -->
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+				aria-expanded="false">
+				<i class="bi bi-person-circle"></i> Profile
+				</a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+				<li><a class="dropdown-item" href="/profile/">View Profile</a></li>
+				<li><hr class="dropdown-divider"></li>
+				<li><a class="dropdown-item text-danger" href="/logout/">Logout</a></li>
+				</ul>
+			</li>
+			{% else %}
+			<!-- Show login option if not logged in -->
+			<li class="nav-item"><a href="/login/" class="nav-link">Login</a></li>
+			{% endif %}
+		</ul>
+		</div>
+	</div>
+	</nav>
+
+    <!-- END nav -->
+    
+    <div class="hero-wrap ftco-degree-bg"
+     style="background-image: url('{% static "images/index_bgi_1.jpg" %}');"
+     data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
+          <div class="col-lg-8 ftco-animate">
+          	<div class="text w-100 text-center mb-md-5 pb-md-5">
+	            <h1 class="mb-4">Rent Professional Cameras & Accessories Easily</h1>
+	            <p style="font-size: 18px;">Choose from DSLR, Mirrorless, Lenses, Drones, and Lighting Equipment for your next shoot.</p>
+	            <a href="https://vimeo.com/45830194" class="icon-wrap popup-vimeo d-flex align-items-center mt-4 justify-content-center">
+	            	<div class="icon d-flex align-items-center justify-content-center">
+	            		<span class="ion-ios-play"></span>
+	            	</div>
+	            	<div class="heading-title ml-5">
+		            	<span>How CamRent Works</span>
+	            	</div>
+	            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Form -->
+    <section class="ftco-section ftco-no-pt bg-light">
+    	<div class="container">
+    		<div class="row no-gutters">
+    			<div class="col-md-12 featured-top">
+    				<div class="row no-gutters">
+	  					<div class="col-md-4 d-flex align-items-center">
+	  						<form action="#" class="request-form ftco-animate bg-primary">
+		          		<h2>Book Your Gear</h2>
+			    				<div class="form-group">
+			    					<label for="" class="label">Pickup Location</label>
+			    					<input type="text" class="form-control" placeholder="City, Studio, Address">
+			    				</div>
+			    				<div class="form-group">
+			    					<label for="" class="label">Return Location</label>
+			    					<input type="text" class="form-control" placeholder="City, Studio, Address">
+			    				</div>
+			    				<div class="d-flex">
+			    					<div class="form-group mr-2">
+			                <label for="" class="label">Pickup Date</label>
+			                <input type="text" class="form-control" id="book_pick_date" placeholder="Date">
+			              </div>
+			              <div class="form-group ml-2">
+			                <label for="" class="label">Return Date</label>
+			                <input type="text" class="form-control" id="book_off_date" placeholder="Date">
+			              </div>
+		              </div>
+		              <div class="form-group">
+		                <label for="" class="label">Pickup Time</label>
+		                <input type="text" class="form-control" id="time_pick" placeholder="Time">
+		              </div>
+			            <div class="form-group">
+			              <input type="submit" value="Rent Now" class="btn btn-secondary py-3 px-4">
+			            </div>
+			    			</form>
+	  					</div>
+	  					<div class="col-md-8 d-flex align-items-center">
+	  						<div class="services-wrap rounded-right w-100">
+	  							<h3 class="heading-section mb-4">Simple Steps to Get Your Perfect Camera</h3>
+	  							<div class="row d-flex mb-4">
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-camera"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Choose Your Gear</h3>
+				                </div>
+					            </div>      
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Select the Best Deal</h3>
+					              </div>
+					            </div>      
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Book & Start Shooting</h3>
+					              </div>
+					            </div>      
+					          </div>
+					        </div>
+					        <p><a href="#" class="btn btn-primary py-3 px-4">Browse All Equipments</a></p>
+	  						</div>
+	  					</div>
+	  				</div>
+				</div>
+  		</div>
+    </section>
+
+    <!-- Featured Cameras -->
+    <section class="ftco-section ftco-no-pt bg-light">
+    	<div class="container">
+    		<div class="row justify-content-center">
+          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+          	<span class="subheading">What we offer</span>
+            <h2 class="mb-2">Featured Cameras & Accessories</h2>
+          </div>
+        </div>
+    		<div class="row">
+    			<div class="col-md-12">
+    				<div class="carousel-car owl-carousel">
+    					<div class="item">
+    						<div class="car-wrap rounded ftco-animate">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url('{% static "images/camera-1.jpg" %}');"></div>
+		    					<div class="text">
+		    						<h2 class="mb-0"><a href="#">Canon EOS R6</a></h2>
+		    						<div class="d-flex mb-3">
+			    						<span class="cat">Mirrorless</span>
+			    						<p class="price ml-auto">₹1500 <span>/day</span></p>
+		    						</div>
+		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Rent Now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    					</div>
+		    				</div>
+    					</div>
+    					<div class="item">
+    						<div class="car-wrap rounded ftco-animate">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url('{% static "images/lens-1.jpg" %}');"></div>
+		    					<div class="text">
+		    						<h2 class="mb-0"><a href="#">Sony G Master Lens 24-70mm</a></h2>
+		    						<div class="d-flex mb-3">
+			    						<span class="cat">Lens</span>
+			    						<p class="price ml-auto">₹700 <span>/day</span></p>
+		    						</div>
+		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Rent Now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    					</div>
+		    				</div>
+    					</div>
+    					<div class="item">
+    						<div class="car-wrap rounded ftco-animate">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url('{% static "images/drone-1.jpg" %}');"></div>
+		    					<div class="text">
+		    						<h2 class="mb-0"><a href="#">DJI Mavic Air 2</a></h2>
+		    						<div class="d-flex mb-3">
+			    						<span class="cat">Drone</span>
+			    						<p class="price ml-auto">₹1200 <span>/day</span></p>
+		    						</div>
+		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Rent Now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    					</div>
+		    				</div>
+    					</div>
+    					<div class="item">
+    						<div class="car-wrap rounded ftco-animate">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url('{% static "images/light-1.jpg" %}');"></div>
+		    					<div class="text">
+		    						<h2 class="mb-0"><a href="#">Godox LED Panel</a></h2>
+		    						<div class="d-flex mb-3">
+			    						<span class="cat">Lighting</span>
+			    						<p class="price ml-auto">₹500 <span>/day</span></p>
+		    						</div>
+		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Rent Now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    					</div>
+		    				</div>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </section>
+
+    <!-- footer -->
+
+     <footer class="bg-dark text-light pt-5 pb-4">
+    <div class="container">
+      <div class="row">
+
+        <!-- About -->
+        <div class="col-md-4 mb-3">
+          <h5 class="text-uppercase mb-3">RentIt</h5>
+          <p>Your one-stop rental platform for cameras, lenses, and more.</p>
+        </div>
+
+        <!-- Links -->
+        <div class="col-md-4 mb-3">
+          <h5 class="text-uppercase mb-3">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/" class="text-light text-decoration-none">Home</a></li>
+            <li><a href="/about/" class="text-light text-decoration-none">About</a></li>
+            <li><a href="/contact/" class="text-light text-decoration-none">Contact</a></li>
+            <li><a href="/products/" class="text-light text-decoration-none">Products</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4 mb-3">
+          <h5 class="text-uppercase mb-3">Contact</h5>
+          <p><i class="fa fa-map-marker me-2"></i> Palakkad, Kerala, India</p>
+          <p><i class="fa fa-envelope me-2"></i> support@rentit.com</p>
+          <p><i class="fa fa-phone me-2"></i> +91 98765 43210</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-3 border-top pt-3">
+        <p class="mb-0">&copy; 2025 RentIt. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+    <!-- The rest sections (About, Services, Testimonial, Blog, Footer, Counter, Loader) can remain SAME as your car template -->
+    <!-- Just update texts/images to match camera rental theme -->
+    
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'js/scrollax.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+    
+  </body>
+</html>

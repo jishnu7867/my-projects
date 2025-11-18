@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Equipment - LensRent</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: #0056b3;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .logo span {
+            color: #ff6b6b;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        nav ul li a:hover {
+            color: #007bff;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-actions a {
+            margin-left: 15px;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 15px 0;
+            background: #f9f9f9;
+            margin-bottom: 30px;
+        }
+        
+        .breadcrumb ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        .breadcrumb ul li {
+            margin-right: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumb ul li:after {
+            content: ">";
+            margin-left: 10px;
+        }
+        
+        .breadcrumb ul li:last-child:after {
+            content: "";
+        }
+        
+        .breadcrumb ul li a {
+            color: #666;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .page-header p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+        .cancel_btn{
+            background-color: #666!important;
+        }
+        .search-bar button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .quick-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-tag {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-tag:hover, .filter-tag.active {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        
+        /* Main Content Layout */
+        .browse-content {
+            display: flex;
+            gap: 30px;
+        }
+        
+        /* Sidebar Filters */
+        .filters-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .filter-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .filter-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .filter-body {
+            padding: 15px 20px;
+            display: block;
+        }
+        
+        .filter-option {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-option input {
+            margin-right: 10px;
+        }
+        
+        .filter-option label {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .filter-count {
+            color: #6c757d;
+            font-size: 12px;
+        }
+        
+        .price-range {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .price-range input {
+            width: 45%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .location-filter {
+            margin-bottom: 15px;
+        }
+        
+        .location-filter input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        /* Products Section */
+        .products-section {
+            flex: 1;
+        }
+        
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .sort-options select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .view-btn.active {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .product-content h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .product-specs {
+            list-style: none;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .product-specs li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .product-specs li:before {
+            content: "•";
+            margin-right: 5px;
+            color: #007bff;
+        }
+        
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .product-location {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .product-location:before {
+            content: "📍";
+            margin-right: 5px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-actions .btn {
+            flex: 1;
+            text-align: center;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        
+        .pagination ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        .pagination ul li {
+            margin: 0 5px;
+        }
+        
+        .pagination ul li a {
+            display: block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #333;
+        }
+        
+        .pagination ul li a:hover, 
+        .pagination ul li a.active {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        
+        /* Categories Section */
+        .categories-section {
+            background: #fff;
+            padding: 50px 0;
+            margin-bottom: 50px;
+            border-radius: 8px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .category-card:hover {
+            background: #007bff;
+            color: #fff;
+            transform: translateY(-5px);
+        }
+        
+        .category-card:hover a {
+            color: #fff;
+        }
+        
+        .category-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .category-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #fff;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .browse-content {
+                flex-direction: column;
+            }
+            
+            .filters-sidebar {
+                width: 100%;
+            }
+            
+            .filter-card {
+                margin-bottom: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .user-actions {
+                margin-top: 15px;
+            }
+            
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .search-bar input {
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
+            
+            .search-bar button {
+                border-radius: 4px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Lens<span>Rent</span></div>
+            <nav>
+                <ul>
+                    <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/all_products/">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dashboard_both/">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="/login/" class="btn">Login</a>
+                <a href="/register/" class="btn btn-secondary">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul>
+                <li><a href="/index/">Home</a></li>
+                <li>Browse Equipment</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Browse Rental Equipment</h1>
+            <p>Find the perfect camera gear for your next project. Filter by category, brand, price, and location.</p>
+        </div>
+
+        <!-- Search Section -->
+        <form method="post" action="{% url 'search_product' %}" class="search-bar">
+            {% csrf_token %}
+            <input type="text" name="search" placeholder="Search..." />
+            <button type="submit">Search</button>
+            <button type="button" class="btn btn-secondary cancel_btn" id="cancel-search">Cancel</button>
+
+        </form>
+        
+
+        <!-- Main Content -->
+        <div class="browse-content">
+            <!-- Filters Sidebar -->
+            <form id="filterForm" method="get" action="{% url 'all_products' %}">
+            <div class="filters-sidebar">
+                <!-- category filter  -->
+                <div class="filter-card">
+                    <div class="filter-header">
+                        Category
+                    </div>
+                    <div class="filter-body">
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-cameras" name="category" value="" {% if not request.GET.category %}checked{% endif %} >
+                            <label for="cat-cameras">All <span class="filter-count">(42)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-cameras" name="category" value="dslr" {% if request.GET.category == 'dslr' %}checked{% endif %} >
+                            <label for="cat-cameras">Cameras <span class="filter-count">(42)</span></label>
+                        </div>
+
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-lenses" name="category" value="lens" {% if request.GET.catrgory == 'lens' %}checked{% endif %}>
+                            <label for="cat-lenses">Lenses <span class="filter-count">(36)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-lighting"  name="category" value="lighting" {% if request.GET.catrgory == 'lighting' %}checked{% endif %} >
+                            <label for="cat-lighting">Lighting <span class="filter-count">(28)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-audio" name="category" value="audio" {% if request.GET.catrgory == 'audio' %}checked{% endif %}>
+                            <label for="cat-audio">Audio <span class="filter-count">(15)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-tripods" name="category" value="tripod" {% if request.GET.catrgory == 'tripod' %}checked{% endif %}>
+                            <label for="cat-tripods">Tripods & Support <span class="filter-count">(22)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="cat-accessories" name="category" value="accessory" {% if request.GET.catrgory == 'accessory' %}checked{% endif %}>
+                            <label for="cat-accessories">Accessories <span class="filter-count">(31)</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- brand filter -->
+                <div class="filter-card">
+                    <div class="filter-header">
+                        Brand
+                    </div>
+                    <div class="filter-body">
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-canon"name="brand" value="canon" {% if request.GET.brand == 'canon' %}checked{% endif %}> 
+                            <label for="brand-canon">Canon <span class="filter-count">(24)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-nikon"name="brand" value="nikon" {% if request.GET.brand == 'nikon' %}checked{% endif %}> 
+                            <label for="brand-nikon">Nikon <span class="filter-count">(18)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-sony"name="brand" value="sony" {% if request.GET.brand == 'sony' %}checked{% endif %}> 
+                            <label for="brand-sony">Sony <span class="filter-count">(22)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-fuji"name="brand" value="fujifilm" {% if request.GET.brand == 'fujifilm' %}checked{% endif %}> 
+                            <label for="brand-fuji">Fujifilm <span class="filter-count">(12)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-panasonic"name="brand" value="panasonic" {% if request.GET.brand == 'panasonic' %}checked{% endif %}> 
+                            <label for="brand-panasonic">Panasonic <span class="filter-count">(8)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-panasonic"name="brand" value="sigma" {% if request.GET.brand == 'sigma' %}checked{% endif %}> 
+                            <label for="brand-panasonic">Sigma <span class="filter-count">(8)</span></label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="brand-panasonic"name="brand" value="tamron" {% if request.GET.brand == 'tamron' %}checked{% endif %}> 
+                            <label for="brand-panasonic">Tamron <span class="filter-count">(8)</span></label>
+                        </div>
+                    </div>
+                </div>
+                <!-- price filter -->
+                <div class="filter-card">
+                    <div class="filter-header">Price Range</div>
+                    <div class="filter-body">
+                        <div class="price-range">
+                            <input type="number" name="min_price" placeholder="Min" value="{{ request.GET.min_price }}">
+                            <input type="number" name="max_price" placeholder="Max" value="{{ request.GET.max_price }}">
+                            <div>
+                            <button type="button" class="btn btn-small">Apply Price Filter</button>
+                            <button type="button" class="btn btn-secondary btn-small cancel-price">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- location filter -->
+                <div class="filter-card">
+                    <div class="filter-header">Location</div>
+                    <div class="filter-body">
+                        <select name="location">
+                            <option value="">All Locations</option>
+                            <option value="ernamkulam" {% if request.GET.location == "ernamkulam" %}selected{% endif %}>Ernamkulam/kochi</option>
+                            <option value="thiruvananthapuram" {% if request.GET.location == "thiruvananthapuram" %}selected{% endif %}>Trivandrum</option>
+                            <option value="palakkad" {% if request.GET.location == "palakkad" %}selected{% endif %}>Palakkad</option>
+                            <option value="trissur" {% if request.GET.location == "trissur" %}selected{% endif %}>Thrissur</option>
+                            <option value="kozhikkode" {% if request.GET.location == "kozhikkode" %}selected{% endif %}>Kozhikkode</option>
+                            <option value="kollam" {% if request.GET.location == "kollam" %}selected{% endif %}>Kollam</option>
+                            <option value="pathanamthitta" {% if request.GET.location == "pathanamthitta" %}selected{% endif %}>Pathanamthitta</option>
+                            <option value="alappuzha" {% if request.GET.location == "alappuzha" %}selected{% endif %}>Alappuzha</option>
+                            <option value="kottayam" {% if request.GET.location == "kottayam" %}selected{% endif %}>Kottayam</option>
+                            <option value="idukki" {% if request.GET.location == "idukki" %}selected{% endif %}>Idukki</option>
+                            <option value="malappuram" {% if request.GET.location == "malappuram" %}selected{% endif %}>Malappuram</option>
+                            <option value="wayanad" {% if request.GET.location == "wayanad" %}selected{% endif %}>Wayanad</option>
+                            <option value="kannur" {% if request.GET.location == "kannur" %}selected{% endif %}>Kannur</option>
+                            <option value="kasaragode" {% if request.GET.location == "kasaragode" %}selected{% endif %}>Kasaragode</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- availability filter -->
+                <div class="filter-card">
+                    <div class="filter-header">Availability</div>
+                    <div class="filter-body">
+                        <div class="filter-option">
+                            <input 
+                                type="radio" 
+                                id="avail-now" 
+                                name="availability" 
+                                value="available"
+                                {% if request.GET.availability == "available" %}checked{% endif %}
+                            >
+                            <label for="avail-now">Available Now</label>
+                        </div>
+                        <div class="filter-option">
+                            <input 
+                                type="radio" 
+                                id="avail-unavailable" 
+                                name="availability" 
+                                value="unavailable"
+                                {% if request.GET.availability == "unavailable" %}checked{% endif %}
+                            >
+                            <label for="avail-unavailable">Unavailable</label>
+                        </div>
+                        <div class="filter-option">
+                            <input 
+                                type="radio" 
+                                id="avail-all" 
+                                name="availability" 
+                                value=""
+                                {% if not request.GET.availability %}checked{% endif %}
+                            >
+                            <label for="avail-all">All</label>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+    
+            <!-- Products Section -->
+            <div class="products-section">
+                <div class="products-header">
+                    <div>
+                        <strong>{{count}}</strong> found
+                    </div>
+
+                    <div class="view-options">
+                        <div class="view-btn active">Grid</div>
+                        <div class="view-btn">List</div>
+                    </div>
+                </div>
+
+                <div class="products-grid">
+                    <!-- Product  -->
+                     {% for products in products %}
+                    <div class="product-card">
+                      
+                        <div class="product-img" style="background-image: url('{{ products.images.first.image.url }}');">
+                        </div>
+                        <div class="product-content">
+                            <div class="product-meta">
+                                <span>{{ products.category }}</span>
+                                <span>⭐ 4.8 (24)</span>
+                            </div>
+                            <h3>{{ products.title }}</h3>
+                            <ul class="product-specs">
+                                <li>30.4MP Full-Frame</li>
+                                <li>61-Point AF System</li>
+                                <li>4K Video Recording</li>
+                            </ul>
+                            <div class="product-price">${{ products.daily_price }} <span>/day</span></div>
+                            <div class="product-location">{{ products.location }}<span>(location)</span></div>
+                            <div class="product-actions">
+                                <a href="{% url 'single_product' products.id %}" class="btn btn-small">View Details</a>
+                                <a href="#" class="btn btn-secondary btn-small">Rent Now</a>
+                            </div>
+                        </div>
+                     
+                    </div>
+                       {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <ul>
+                        <li><a href="#" class="active">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="categories-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Browse by Category</h2>
+                    <p>Explore our wide range of camera equipment categories</p>
+                </div>
+                <div class="categories-grid">
+                    <div class="category-card">
+                        <div class="category-icon">📷</div>
+                        <h3>DSLR Cameras</h3>
+                        <a href="category-dslr.html">Browse 24 items →</a>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">📸</div>
+                        <h3>Mirrorless Cameras</h3>
+                        <a href="category-mirrorless.html">Browse 18 items →</a>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🔍</div>
+                        <h3>Lenses</h3>
+                        <a href="category-lenses.html">Browse 36 items →</a>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">💡</div>
+                        <h3>Lighting</h3>
+                        <a href="category-lighting.html">Browse 28 items →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>LensRent</h3>
+                    <p>Your trusted platform for camera and accessories rentals. Connecting photographers with the gear they need.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/index/">Home</a></li>
+                        <li><a href="/browse/">Browse Items</a></li>
+                        <li><a href="/how-it-works/">How It Works</a></li>
+                        <li><a href="/about/">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 LensRent. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ✅ Get the filter form (wrap all filters inside <form id="filterForm" method="get"> ... </form>)
+    const filterForm = document.getElementById("filterForm");
+
+    if (!filterForm) {
+        console.error("⚠️ No form with id='filterForm' found. Wrap all filters inside one form.");
+        return;
+    }
+
+    // 🔹 Auto-submit when checkbox, radio, or select changes
+    filterForm.querySelectorAll("input[type=checkbox], input[type=radio], select").forEach(input => {
+        input.addEventListener("change", () => filterForm.submit());
+    });
+
+    // 🔹 Handle price filter apply button click
+    const priceApplyBtn = filterForm.querySelector(".price-range .btn-small");
+    const priceCancelBtn = filterForm.querySelector(".price-range .cancel-price");
+
+    if (priceApplyBtn) {
+        priceApplyBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const min = filterForm.querySelector("input[name=min_price]").value.trim();
+            const max = filterForm.querySelector("input[name=max_price]").value.trim();
+
+            if (min || max) {
+                filterForm.submit();
+            } else {
+                alert("Please enter a minimum or maximum price.");
+            }
+        });
+    }
+
+    // 🔹 Handle price filter cancel button
+    if (priceCancelBtn) {
+        priceCancelBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            filterForm.querySelector("input[name=min_price]").value = "";
+            filterForm.querySelector("input[name=max_price]").value = "";
+            filterForm.submit();
+        });
+    }
+
+    // 🔹 Handle location input (submit on Enter)
+    const locationInput = filterForm.querySelector(".location-filter input[type=text]");
+    if (locationInput) {
+        locationInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                filterForm.submit();
+            }
+        });
+    }
+
+
+    document.getElementById("cancel-search").addEventListener("click", function() {
+    window.location.href = "{% url 'all_products' %}";
+});
+    // 🔹 Optional: Handle search bar (if exists)
+    // const searchButton = document.querySelector(".search-bar button");
+    // const searchInput = document.querySelector(".search-bar input");
+    // if (searchButton && searchInput) {
+    //     searchButton.addEventListener("click", (e) => {
+    //         e.preventDefault();
+    //         if (searchInput.value.trim() !== "") {
+    //             filterForm.submit();
+    //         } else {
+    //             alert("Enter a keyword to search.");
+    //         }
+    //     });
+    // }
+
+    // 🔹 View toggle buttons (grid/list switch)
+    document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+
+            const grid = document.querySelector(".products-grid");
+            if (grid) {
+                const viewType = this.textContent.trim().toLowerCase();
+                grid.style.gridTemplateColumns =
+                    viewType === "list" ? "1fr" : "repeat(auto-fill, minmax(280px, 1fr))";
+            }
+        });
+    });
+
+});
+
+</script>
+

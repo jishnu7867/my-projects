@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <!-- Other head elements -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <p>Price Summary</p>
+    <p>₹ {{ amount }}</p>
+    <button id="pay-button">Proceed to payment</button>
+    <script>
+        var options = {
+            key: '{{ razorpay_api_key }}',
+            amount: '{{ amount }}'.replace(/,/g, '')*100,
+            currency: '{{ currency }}',
+            name: 'Eiser Ecommerce',
+            description: 'Purchase Description',
+            image: '/static/img/logo.png',
+            prefill: {
+                name: 'Your Name',
+                email: 'your_email@example.com',
+            },
+            theme: {
+                color: '#F37254',
+            },
+            handler: function(response) {
+            // This function will be called on successful payment
+            console.log(response);
+            alert('Payment successful. Payment ID: ' + response.razorpay_payment_id);
+
+            // Perform AJAX POST request to your backend
+            $.ajax({
+                url: "{% url 'payment_post' %}", // Replace with your Django view's URL
+                method: "POST",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}', // Include CSRF token for security
+                    amount: '{{ amount }}'.replace(/,/g, '')*100,
+                    checkout_id: '{{check_id}}',
+                },
+                success: function() {
+                    alert("Payment recorded successfully. Redirecting...");
+                    window.location.href = "/orders_history/";
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error: " + error);
+                    alert("An error occurred while processing your payment. Please contact support.");
+                }
+            });
+}
+
+        };
+        var rzp = new Razorpay(options);
+        document.getElementById('pay-button').onclick = function () {
+            rzp.open();
+            e.preventDefault();
+        };
+    </script>
+</body>
+</html>

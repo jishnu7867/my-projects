@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RentIt - Camera & Accessories Rental</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap & Icons -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+      .hero-section {
+        background: url('{% static "images/camera_bg.jpg" %}') center/cover no-repeat;
+        min-height: 80vh;
+        color: white;
+        display: flex;
+        align-items: center;
+        text-align: center;
+      }
+      .overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .service-icon {
+        font-size: 40px;
+        color: #007bff;
+      }
+    </style>
+  </head>
+
+  <body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">Cam<span class="text-primary">Rent</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/all_products/">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="/dashboard_both/">Dashboard</a></li>
+          <!-- <li class="nav-item"><a class="btn btn-outline-light ms-2" href="/login/">Login</a></li> -->
+		  	{% if request.session.lid %}
+			<!-- Show when logged in -->
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+				aria-expanded="false">
+				<i class="bi bi-person-circle"></i> Profile
+				</a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+				<li><a class="dropdown-item" href="/profile/">View Profile</a></li>
+				<li><hr class="dropdown-divider"></li>
+				<li><a class="dropdown-item text-danger" href="/logout/">Logout</a></li>
+				</ul>
+			</li>
+			{% else %}
+			<!-- Show login option if not logged in -->
+			<li class="nav-item"><a href="/login/" class="nav-link">Login</a></li>
+			{% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section d-flex align-items-center justify-content-center">
+    <div class="overlay"></div>
+    <div class="container hero-content">
+      <h1 class="display-4 fw-bold">Rent Your Perfect Camera Today</h1>
+      <p class="lead">Find cameras, lenses, and accessories from trusted sellers at the best prices.</p>
+      <a href="/all_products/" class="btn btn-primary btn-lg mt-3">Browse Rentals</a>
+    </div>
+  </section>
+
+  <!-- Featured Services -->
+  <section class="py-5 bg-light text-center">
+    <div class="container">
+      <h2 class="fw-bold mb-5">Why Choose RentIt?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="p-4 bg-white shadow rounded">
+            <div class="service-icon mb-3"><i class="ion-ios-camera"></i></div>
+            <h5>High-Quality Gear</h5>
+            <p>Rent premium cameras, lenses, and lighting equipment from verified sellers.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 bg-white shadow rounded">
+            <div class="service-icon mb-3"><i class="ion-ios-calendar"></i></div>
+            <h5>Flexible Rental Periods</h5>
+            <p>Choose your preferred rental dates — daily, weekly, or monthly options available.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 bg-white shadow rounded">
+            <div class="service-icon mb-3"><i class="ion-ios-checkmark"></i></div>
+            <h5>Secure Payments</h5>
+            <p>Fast and reliable payment gateway with transparent pricing — no hidden fees.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="py-5">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-5">Featured Equipment</h2>
+      <div class="row g-4">
+        {% for product in products %}
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.title }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.title }}</h5>
+              <p class="card-text">{{ product.category }}</p>
+              <p class="text-primary fw-bold">₹{{ product.daily_price }} / day</p>
+              <a href="/rent/{{ product.id }}/" class="btn btn-primary btn-sm">Rent Now</a>
+              <a href="/product/{{ product.id }}/" class="btn btn-outline-primary btn-sm">Details</a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p>No products available at the moment.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+    <!-- footer -->
+    <footer class="ftco-footer ftco-bg-dark ftco-section bg_clr">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2"><a href="/index/" class="logo ft_clr">Cam<span class="text-primary">Rent</span></a></h2>
+              <p>Your one-stop rental platform for cameras, lenses, and more.</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">Information</h2>
+              <ul class="list-unstyled">
+                <li><a href="/about/" class="py-2 d-block">About</a></li>
+                <li><a href="/sevices/" class="py-2 d-block">Services</a></li>
+                <li><a href="#" class="py-2 d-block">Term and Conditions</a></li>
+                <li><a href="#" class="py-2 d-block">Privacy &amp; Cookies Policy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+             <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Customer Support</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">FAQ</a></li>
+                <li><a href="#" class="py-2 d-block">How it works</a></li>
+                <li><a href="/contact/" class="py-2 d-block">Contact Us</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+            	<h2 class="ftco-heading-2">Have a Questions?</h2>
+            	<div class="block-23 mb-3">
+	              <ul>
+	                <li><span class="icon icon-map-marker"></span><span class="text">Palakkad, Kerala, India</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+91 98765 43210</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text"> support@rentit.com</span></a></li>
+	              </ul>
+	            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  <!-- Scripts -->
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'js/scrollax.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

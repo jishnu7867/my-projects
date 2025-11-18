@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  {% load math_filters %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CamRent - Dashboard</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .dashboard-header {
+      background-color: #0d6efd;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .dashboard-switch {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .dashboard-option {
+      display: inline-block;
+      background: white;
+      border: 1px solid #0d6efd;
+      color: #0d6efd;
+      border-radius: 20px;
+      padding: 8px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .dashboard-option.active {
+      background: #0d6efd;
+      color: white;
+    }
+
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+      color: #0d6efd;
+      font-weight: 600;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .tab.active {
+      color: #0d6efd;
+      border-bottom: 2px solid #0d6efd;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h2>Welcome to CamRent Dashboard</h2>
+    <p>Manage your rentals and listings in one place</p>
+  </div>
+
+  <!-- Dashboard Switch -->
+  <div class="dashboard-switch">
+    <span id="renter-tab" class="dashboard-option active">Renter Dashboard</span>
+    <span id="lender-tab" class="dashboard-option">Lender Dashboard</span>
+  </div>
+
+  <div class="container mb-5">
+
+    <!-- RENTER DASHBOARD -->
+    <div id="renter-dashboard">
+      <h4 class="section-title">Your Rentals</h4>
+      <div class="row g-4">
+        {% for rent in rentals %}
+        <div class="col-md-4">
+          <div class="card p-3">
+            <img src="{{ rent.product.images.first.image.url }}" class="card-img-top" alt="{{ rent.product.title }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ rent.product.title }}</h5>
+              <p class="card-text"><strong>Duration:</strong> {{ rent.days }} days</p>
+              <p class="card-text"><strong>Status:</strong> {{ rent.status }}</p>
+              <a href="/request_view_lender/" class="btn btn-outline-primary btn-sm">View Details</a>
+              
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No active rentals yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- LENDER DASHBOARD -->
+    <div id="lender-dashboard" style="display:none;">
+      <h4 class="section-title">Your Listings</h4>
+
+      <!-- Tabs -->
+      <div class="d-flex justify-content-center mb-3">
+        <button class="tab active" data-tab="requests">Rental Requests</button>
+        <button class="tab" data-tab="active">Active Rentals</button>
+        <button class="tab" data-tab="listings">My Listings</button>
+      </div>
+
+      <!-- Requests -->
+      <div id="requests-tab" class="tab-content active">
+        <div class="row g-4">
+          {% for req in requests %}
+            <div class="col-md-4">
+              <div class="card p-3 h-100 shadow-sm">
+                <img src="{{ req.product.images.first.image.url }}" class="card-img-top rounded" alt="{{ req.product.title }}" style="height:180px; object-fit:cover;">
+
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ req.product.title }}</h5>
+                  <p class="card-text mb-1"><strong>Requested by:</strong> {{ req.renter.fname }}</p>
+                  <p class="mb-1"><strong>From:</strong> {{ req.from_date|date:"Y-m-d" }}</p>
+                  <p class="mb-1"><strong>To:</strong> {{ req.to_date|date:"Y-m-d" }}</p>
+                  <p class="mb-1"><strong>Total Days:</strong> {{ req.rental_days }}</p>
+                  <p class="mb-1"><strong>Per Day:</strong> ₹{{ req.product.daily_price }}</p>
+                  <p class="mb-2"><strong>Total:</strong> ₹{{ req.product.daily_price|floatformat:0|add:"0"|floatformat:0 }} × {{ req.rental_days }} = ₹{{ req.product.daily_price|mul:req.rental_days|floatformat:0 }}</p>
+                  <p><strong>Status:</strong> 
+                    <span class="badge bg-{% if req.status == 'pending' %}warning{% elif req.status == 'accepted' %}success{% else %}secondary{% endif %}">
+                      {{ req.status|title }}
+                    </span>
+                  </p>
+
+                  <div class="mt-auto">
+                    {% if req.status == 'pending' %}
+                      <a href="/approve_request/{{ req.id }}/" class="btn btn-success btn-sm w-100 mb-2">Approve</a>
+                      <a href="/reject_request/{{ req.id }}/" class="btn btn-outline-danger btn-sm w-100">Reject</a>
+                    {% elif req.status == 'accepted' %}
+                      <button class="btn btn-success btn-sm w-100" disabled>Approved</button>
+                    {% elif req.status == 'rejected' %}
+                      <button class="btn btn-secondary btn-sm w-100" disabled>Rejected</button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-muted">No rental requests at the moment.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Active rentals -->
+      <div id="active-tab" class="tab-content">
+        <div class="row g-4">
+          {% for rent in active_rentals %}
+          <div class="col-md-4">
+            <div class="card p-3">
+              <img src="{{ rent.product.images.first.image.url }}" class="card-img-top" alt="{{ rent.product.title }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ rent.product.title }}</h5>
+                <p><strong>Rented by:</strong> {{ rent.renter.fname }}</p>
+                <p><strong>Rented on:</strong> {{ rent.created_at|date:"M d, Y" }}</p>
+                <span class="badge bg-success">Active</span>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted">No active rentals right now.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- My listing -->
+      <div id="listings-tab" class="tab-content">
+        <div class="row g-4">
+          {% for product in my_listings %}
+          <div class="col-md-4">
+            <div class="card p-3">
+              <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.title }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p><strong>Category:</strong> {{ product.category }}</p>
+                <p><strong>Status:</strong> {{ product.status|default:"Available" }}</p>
+                <a href="/edit_product/{{ product.id }}/" class="btn btn-outline-primary btn-sm">Edit</a>
+                <a href="/delete_product/{{ product.id }}/" class="btn btn-outline-danger btn-sm">Delete</a>
+                <a href="{% url 'single_product' product.id %}" class="btn btn-info py-2 ml-1">View</a>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted">No products listed yet.</p>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+          <a href="{% url 'product_upload' %}" class="btn btn-outline-primary">+ Add New Product</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light py-4 text-center">
+    <p class="mb-0">&copy; 2025 CamRent. All rights reserved.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Switch between renter and lender dashboards
+    document.getElementById('renter-tab').addEventListener('click', function() {
+      document.getElementById('renter-dashboard').style.display = 'block';
+      document.getElementById('lender-dashboard').style.display = 'none';
+      document.querySelectorAll('.dashboard-option').forEach(opt => opt.classList.remove('active'));
+      this.classList.add('active');
+    });
+
+    document.getElementById('lender-tab').addEventListener('click', function() {
+      document.getElementById('renter-dashboard').style.display = 'none';
+      document.getElementById('lender-dashboard').style.display = 'block';
+      document.querySelectorAll('.dashboard-option').forEach(opt => opt.classList.remove('active'));
+      this.classList.add('active');
+    });
+
+    // Tabs inside Lender Dashboard
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+

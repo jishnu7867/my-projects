@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.title }} - LensRent</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  <!-- your main CSS -->
+</head>
+<body>
+
+<!-- Header -->
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm  sticky-top" id="ftco-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/index/">Cam<span>Rent</span></a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+     <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item "><a href="/dashboard_both/" class="nav-link">Dashboard</a></li>
+	          <li class="nav-item active"><a href="/browse/" class="nav-link">Browse Items</a></li>
+	          <li class="nav-item"><a href="/login/" class="nav-link">Login</a></li>
+	        </ul>
+	      </div>
+    </div>
+  </nav>
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb py-3">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/browse/">Browse Items</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Product Section -->
+<div class="container">
+    <div class="row">
+        <!-- Images -->
+        <div class="col-lg-6 mb-4">
+            <div class="main-image mb-3">
+            <img id="main-image" src="{{ product.images.first.image.url }}" class="img-fluid" style="width: 500px;" alt="{{ product.title }}">
+            {% for img in product.images.all %}
+                <img src="{{ img.image.url }}" class="img-thumbnail" style="width:80px; cursor:pointer;" 
+                    onclick="document.getElementById('main-image').src=this.src">
+            {% endfor %}
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-6">
+            <h2 class="mb-3">{{ product.title }}</h2>
+            <p class="h4 text-primary mb-3">${{ product.daily_price }}/day</p>
+
+            <ul class="list-unstyled mb-3">
+                <li><strong>Category:</strong> {{ product.category }}</li>
+                <li><strong>Brand:</strong> {{ product.brand }}</li>
+                <li><strong>Model:</strong> {{ product.model }}</li>
+                <li><strong>Condition:</strong> {{ product.condition }}</li>
+                
+            </ul>
+
+            <p>{{ product.description }}</p>
+            <div>
+              <h3 class="mb-3">Features</h3>
+              {% if features %}
+                <ul class="list-unstyled">
+                  {% for f in features %}
+                    <li>• {{ f.features }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted">No features added for this product.</p>
+              {% endif %}
+            </div>
+            <!-- Availability -->
+            <div>
+                <h5>Availability</h5>
+                <div class="d-flex flex-wrap gap-1">
+                    <p style="color: black;"><strong>{{ product.availability }}</strong></p>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <a href="/rent/{{ product.id }}/" class="btn btn-primary me-2">Rent Now</a>
+                <a href="/contact_lender/{{ product.id }}/" class="btn btn-outline-primary">Contact Lender</a>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Seller Info -->
+    <div class="card mt-4 p-3">
+        <h5>Seller Information</h5>
+        <p><strong>Name:</strong> {{ product.signup.fname }} {{ product.signup.lname }}</p>
+        <p><strong>Email:</strong> {{ product.login.email }}</p>
+        <p><strong>Location:</strong> {{ product.location }}</p>
+    </div>
+</div>
+
+<!-- Footer -->
+  <footer class="bg-dark text-light pt-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <h5>LensRent</h5>
+          <p>Your trusted platform for camera rentals.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="index.html" class="text-light">Home</a></li>
+            <li><a href="browse.html" class="text-light">Browse Items</a></li>
+            <li><a href="how-it-works.html" class="text-light">How It Works</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>For Lenders</h5>
+          <ul class="list-unstyled">
+            <li><a href="item-upload.html" class="text-light">List Your Gear</a></li>
+            <li><a href="lender_dashboard.html" class="text-light">Lender Dashboard</a></li>
+            <li><a href="pricing.html" class="text-light">Pricing Guide</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Connect</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-light">Facebook</a></li>
+            <li><a href="#" class="text-light">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center border-top pt-3 pb-2">
+        <p class="mb-0">&copy; 2025 LensRent. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
